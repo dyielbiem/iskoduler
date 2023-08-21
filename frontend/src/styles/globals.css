@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-600;
+}
+
+#__next {
+  @apply w-full flex items-center flex-col;
+}
+/* * {
+  @apply border-2 border-green-500;
+} */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+} */
