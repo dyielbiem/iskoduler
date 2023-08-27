@@ -64,9 +64,7 @@ export const postSignIn = (req, res) => __awaiter(void 0, void 0, void 0, functi
         if (!checkPassword)
             return res.status(400).json({ Error: "Incorrect password" });
         createToken(String(existingUser._id), res);
-        setTimeout(() => {
-            res.json({ username, id: existingUser._id });
-        }, 3000);
+        res.json({ username, id: existingUser._id });
     }
     catch (_a) {
         res.status(400).json({ Error: "Bad Request" });

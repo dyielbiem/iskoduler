@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import ScheduleContextProvider from "@/contexts/scheduleContextProvider";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -8,7 +9,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>ISKOduler</title>
       </Head>
-      <Component {...pageProps} />
+      <ScheduleContextProvider>
+        <Component {...pageProps} />
+      </ScheduleContextProvider>
     </>
   );
 }

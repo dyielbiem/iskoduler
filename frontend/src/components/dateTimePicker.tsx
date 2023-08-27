@@ -3,31 +3,34 @@ import { IoClose } from "react-icons/io5";
 import { parse, format } from "date-fns";
 
 interface Props {
-  isDeadlinePickerVisible: boolean;
-  showDeadlineFunction: () => void;
+  isDateTimePickerVisible: boolean;
+  setIsDateTimePickerVisible: React.Dispatch<SetStateAction<boolean>>;
   setDeadline: React.Dispatch<SetStateAction<string>>;
 }
 
-const DeadlinePicker = ({
-  isDeadlinePickerVisible,
-  showDeadlineFunction,
+const DateTimePicker = ({
+  isDateTimePickerVisible,
+  setIsDateTimePickerVisible,
   setDeadline,
 }: Props) => {
   const [time, setTime] = useState<string>("23:59");
   const currentDate: string = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState<string>(currentDate);
+
+  // Function that manage the visibility of date time picker
   const showPicker = (event: React.MouseEvent<HTMLInputElement>) => {
     event.preventDefault();
     (event.target as HTMLInputElement).showPicker();
   };
 
+  // Function that will be called when submit is called
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const time24: Date = parse(time, "HH:mm", new Date());
-      const time12: string = format(time24, "h:mm a");
+      const time12: string = format(time24, "hh:mm a");
       setDeadline(`${date} ${time12}`);
-      showDeadlineFunction();
+      setIsDateTimePickerVisible((prevState) => !prevState);
     } catch (error: any) {
       return console.log(error.name);
     }
@@ -36,7 +39,7 @@ const DeadlinePicker = ({
   return (
     <div
       className={`absolute top-0 left-0 bg-[rgba(0,0,0,0.6)]
-                 ${isDeadlinePickerVisible ? "flex" : "hidden"}
+                 ${isDateTimePickerVisible ? "flex" : "hidden"}
                  justify-center items-center
                  w-screen h-screen px-4 z-30`}
     >
@@ -63,7 +66,9 @@ const DeadlinePicker = ({
                         text-3xl
                         fill-white
                         text-white"
-            onClick={showDeadlineFunction}
+            onClick={() =>
+              setIsDateTimePickerVisible((prevState) => !prevState)
+            }
           />
         </div>
         <input
@@ -104,4 +109,4 @@ const DeadlinePicker = ({
   );
 };
 
-export default DeadlinePicker;
+export default DateTimePicker;

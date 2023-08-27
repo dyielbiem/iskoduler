@@ -7,30 +7,29 @@ import { useRouter } from "next/router";
 import { getSchedules } from "@/utils/requests";
 import TaskForm from "@/components/taskForm";
 import ClassForm from "@/components/classForm";
+import useScheduleContext from "@/customHooks/useScheduleContext";
+
+type viewType = "class" | "task";
 
 const Home = () => {
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [classes, setClasses] = useState<any[]>([]);
-  const [visibleSchedules, setVisibleSchedules] = useState<"tasks" | "classes">(
-    "classes"
-  );
+  const { dispatch } = useScheduleContext();
+  const [viewOption, setViewOption] = useState<viewType>("task");
   const router = useRouter();
-  const [taskFormVisibility, setTaskFormVisibility] = useState<boolean>(false);
-  const [classFormVisibility, setClassFormVisibility] =
-    useState<boolean>(false);
+  const [isTaskFormVisible, setIsTaskFormVisible] = useState<boolean>(false);
+  const [isClassFormVisible, setIsClassFormVisible] = useState<boolean>(false);
 
   // Fetch all tasks and classes through GET Request
   const fetchSchedules = async () => {
     try {
       const fetchedSchedules = await getSchedules();
       if (fetchedSchedules.Error) throw Error(fetchedSchedules.Error);
-      setTasks(fetchedSchedules.Tasks);
-      setClasses(fetchedSchedules.Classes);
+      dispatch({ type: "GET_TASKS", payload: fetchedSchedules.Tasks });
+      dispatch({ type: "GET_CLASSES", payload: fetchedSchedules.Classes });
     } catch (error: any) {
       if (error.message === "Unauthorized") {
         router.push("/");
       } else {
-        console.log(error.name);
+        console.log(error);
       }
     }
   };
@@ -39,12 +38,8 @@ const Home = () => {
     fetchSchedules();
   }, []);
 
-  const showTaskForm = () => {
-    setTaskFormVisibility((prevState) => !prevState);
-  };
-
   const showClassForm = () => {
-    setClassFormVisibility((prevState) => !prevState);
+    setIsClassFormVisible((prevState) => !prevState);
   };
 
   return (
@@ -54,26 +49,31 @@ const Home = () => {
         className="flex flex-col items-center
                    w-[95%]"
       >
-        <TabSwitcher
-          setVisibleSchedules={setVisibleSchedules}
-          visibleSchedules={visibleSchedules}
-        />
-        <Schedules
-          tasks={tasks}
-          classes={classes}
-          visibleSchedules={visibleSchedules}
-        />
+        <TabSwitcher viewOption={viewOption} setViewOption={setViewOption} />
+        <Schedules viewOption={viewOption} />
         <AddSchedule
-          showTaskForm={showTaskForm}
+          setIsTaskFormVisible={setIsTaskFormVisible}
           showClassForm={showClassForm}
         />
         <TaskForm
-          showTaskForm={showTaskForm}
-          taskFormVisibility={taskFormVisibility}
+          isTaskFormVisible={isTaskFormVisible}
+          setIsTaskFormVisible={setIsTaskFormVisible}
+          taskNamePlaceholder={""}
+          descriptionPlaceholder={""}
+          subjectPlaceholder={""}
+          typePlaceholder={"Type*"}
+          deadlinePlaceholder={"Deadline*"}
+          action={{ type: "ADD" }}
         />
         <ClassForm
-          visibility={classFormVisibility}
-          setVisibility={setClassFormVisibility}
+          isVisible={isClassFormVisible}
+          setIsVisible={setIsClassFormVisible}
+          classNamePlaceholder=""
+          descriptionPlaceholder=""
+          daySchedulePlaceholder="Day Schedule*"
+          timeStartPlaceholder=""
+          timeEndPlaceholder=""
+          action={{ type: "ADD" }}
         />
       </main>
     </>

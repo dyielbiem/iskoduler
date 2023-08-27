@@ -5,16 +5,16 @@ import { IoClose } from "react-icons/io5";
 import { useState } from "react";
 
 interface Props {
-  showTaskForm: () => void;
+  setIsTaskFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
   showClassForm: () => void;
 }
 
-const AddSchedule = ({ showTaskForm, showClassForm }: Props) => {
+const AddSchedule = ({ setIsTaskFormVisible, showClassForm }: Props) => {
   const [isTypeVisible, setIsTypeVisible] = useState<boolean>(false);
 
   const handleTaskClick = () => {
     setIsTypeVisible((prevState) => !prevState);
-    showTaskForm();
+    setIsTaskFormVisible((prevState) => !prevState);
   };
 
   const handleClassClick = () => {

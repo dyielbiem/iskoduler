@@ -1,59 +1,112 @@
 import { useState, SetStateAction } from "react";
 import CustomSelect from "./customSelect";
 import { IoCalendarSharp } from "react-icons/io5";
-import DeadlinePicker from "./deadlinePicker";
+import DateTimePicker from "./dateTimePicker";
 import { IoArrowBack } from "react-icons/io5";
-import { postTask } from "@/utils/requests";
+import { postTask, updateTask } from "@/utils/requests";
 import { DateTime } from "luxon";
+import useScheduleContext from "@/customHooks/useScheduleContext";
 
 interface Props {
-  taskFormVisibility: boolean;
-  showTaskForm: () => void;
+  isTaskFormVisible: boolean;
+  setIsTaskFormVisible: React.Dispatch<SetStateAction<boolean>>;
+  taskNamePlaceholder: string;
+  descriptionPlaceholder: string;
+  subjectPlaceholder: string;
+  typePlaceholder: string;
+  deadlinePlaceholder: string;
+  action: { type: "ADD" } | { type: "EDIT"; taskID: string };
 }
 
-const TaskForm = ({ taskFormVisibility, showTaskForm }: Props) => {
-  const [isDeadlinePickerVisible, setIsDeadlinePickerVisible] =
+const TaskForm = ({
+  isTaskFormVisible,
+  setIsTaskFormVisible,
+  taskNamePlaceholder,
+  descriptionPlaceholder,
+  subjectPlaceholder,
+  typePlaceholder,
+  deadlinePlaceholder,
+  action,
+}: Props) => {
+  const { dispatch } = useScheduleContext();
+  const [isDateTimePickerVisible, setIsDateTimePickerVisible] =
     useState<boolean>(false);
-  const [taskName, setTaskName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [subject, setSubject] = useState<string>("");
-  const [type, setType] = useState<string>("Type*");
-  const [deadline, setDeadline] = useState("Deadline*");
-  const selectOptions: string[] = ["Type", "Activity", "Assignment", "dasda"];
+  const [taskName, setTaskName] = useState<string>(taskNamePlaceholder);
+  const [description, setDescription] = useState<string>(
+    descriptionPlaceholder
+  );
+  const [subject, setSubject] = useState<string>(subjectPlaceholder);
+  const [type, setType] = useState<string>(typePlaceholder);
+  const [deadline, setDeadline] = useState<string>(deadlinePlaceholder);
+  const selectOptions: string[] = ["Type", "Activity", "Assignment"];
 
-  const showDeadlineFunction = () => {
-    setIsDeadlinePickerVisible((prevState) => !prevState);
-  };
-
+  // Function that will be called when submit is clicked
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const requiredField = [taskName, subject, type, deadline];
-
-    if (
-      requiredField.some((field) => !String(field).trim()) ||
-      type === "Type*"
-    )
-      return console.log("All required fields must be filled");
-
     const timeNow = DateTime.local();
     const timeZone = timeNow.toFormat("ZZZZ");
 
-    try {
-      const newTask = await postTask(
-        taskName,
-        String(`${deadline} ${timeZone}`),
-        type,
-        subject,
-        description
-      );
+    // Check if there is an empty required field
+    if (
+      requiredField.some((field) => !String(field).trim()) ||
+      type === "Type*" ||
+      deadline === "Deadline*"
+    )
+      return console.log("All required fields must be filled");
 
-      if (newTask.Error) throw Error(newTask.Error);
-      setTaskName("");
-      setDescription("");
-      setSubject("");
-      setDeadline("Deadline*");
-      setType("Type*");
-      showTaskForm();
+    try {
+      // Check if action type of the form is to add new task
+      if (action.type === "ADD") {
+        const newTask = await postTask(
+          taskName,
+          String(`${deadline} ${timeZone}`),
+          type,
+          subject,
+          description
+        );
+
+        if (newTask.Error) throw Error(newTask.Error);
+
+        // Clear all the fields in the task form
+        setTaskName("");
+        setDescription("");
+        setSubject("");
+        setDeadline("Deadline*");
+        setType("Type*");
+
+        // Add the new task in the task view
+        dispatch({ type: "ADD_TASK", payload: newTask });
+
+        // Hide the task form
+        setIsTaskFormVisible((prevState) => !prevState);
+      } else if (action.type === "EDIT") {
+        if (
+          taskName === taskNamePlaceholder &&
+          description === descriptionPlaceholder &&
+          type === typePlaceholder &&
+          subject === subjectPlaceholder &&
+          deadline === deadlinePlaceholder
+        ) {
+          return setIsTaskFormVisible((prevState) => !prevState);
+        }
+
+        const editedTask = await updateTask(action.taskID, {
+          taskName,
+          deadline: String(`${deadline} ${timeZone}`),
+          type,
+          subject,
+          description,
+        });
+
+        if (editedTask.Error) throw Error(editedTask.Error);
+
+        // // Add the new task in the task view
+        dispatch({ type: "EDIT_TASK", payload: editedTask });
+
+        // Hide the task form
+        setIsTaskFormVisible((prevState) => !prevState);
+      }
     } catch (error: any) {
       console.log(error);
     }
@@ -61,9 +114,9 @@ const TaskForm = ({ taskFormVisibility, showTaskForm }: Props) => {
 
   return (
     <div
-      className={`fixed top-0 bg-[rgba(0,0,0,0.5)]
-                 justify-center items-center
-                 ${taskFormVisibility ? "flex" : "hidden"} 
+      className={`fixed top-0 left-0 bg-[rgba(0,0,0,0.5)]
+                 justify-center items-center z-50 text-black
+                 ${isTaskFormVisible ? "flex" : "hidden"} 
                  min-h-screen 
                  w-screen`}
     >
@@ -74,7 +127,7 @@ const TaskForm = ({ taskFormVisibility, showTaskForm }: Props) => {
                      h-screen 
                      w-screen 
                      p-2
-                     z-30"
+                     "
         onSubmit={handleSubmit}
       >
         <div
@@ -83,7 +136,7 @@ const TaskForm = ({ taskFormVisibility, showTaskForm }: Props) => {
         >
           <button
             type="button"
-            onClick={showTaskForm}
+            onClick={() => setIsTaskFormVisible((prevState) => !prevState)}
             className="text-2xl text-white"
           >
             <IoArrowBack />
@@ -92,7 +145,7 @@ const TaskForm = ({ taskFormVisibility, showTaskForm }: Props) => {
         </div>
         <input
           type="text"
-          placeholder="Title*"
+          placeholder={"Title*"}
           value={taskName}
           onChange={(event) => setTaskName(event.target.value)}
           className="w-full rounded-xl outline-none
@@ -104,7 +157,7 @@ const TaskForm = ({ taskFormVisibility, showTaskForm }: Props) => {
           placeholder="Description"
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          className="w-full rounded-xl outline-none resize-none
+          className="w-full rounded-xl outline-none resize-none 
                      py-2
                      px-3"
         />
@@ -127,7 +180,7 @@ const TaskForm = ({ taskFormVisibility, showTaskForm }: Props) => {
                      items-center bg-white cursor-pointer
                      py-2
                      px-3"
-          onClick={showDeadlineFunction}
+          onClick={() => setIsDateTimePickerVisible((prevState) => !prevState)}
         >
           <p
             className={`${
@@ -148,9 +201,10 @@ const TaskForm = ({ taskFormVisibility, showTaskForm }: Props) => {
           Submit
         </button>
       </form>
-      <DeadlinePicker
-        showDeadlineFunction={showDeadlineFunction}
-        isDeadlinePickerVisible={isDeadlinePickerVisible}
+
+      <DateTimePicker
+        setIsDateTimePickerVisible={setIsDateTimePickerVisible}
+        isDateTimePickerVisible={isDateTimePickerVisible}
         setDeadline={setDeadline}
       />
     </div>

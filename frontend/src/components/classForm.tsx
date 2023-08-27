@@ -1,19 +1,39 @@
 import { IoArrowBack } from "react-icons/io5";
 import CustomSelect from "./customSelect";
 import { useState, useRef, SetStateAction, useEffect } from "react";
-import { postClass } from "@/utils/requests";
+import { postClass, updateClass } from "@/utils/requests";
+import useScheduleContext from "@/customHooks/useScheduleContext";
 
 interface Props {
-  visibility: boolean;
-  setVisibility: React.Dispatch<SetStateAction<boolean>>;
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<SetStateAction<boolean>>;
+  classNamePlaceholder: string;
+  descriptionPlaceholder: string;
+  daySchedulePlaceholder: string;
+  timeStartPlaceholder: string;
+  timeEndPlaceholder: string;
+  action: { type: "ADD" } | { type: "EDIT"; classID: string };
 }
 
-const ClassForm = ({ visibility, setVisibility }: Props) => {
-  const [className, setClassName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [dayPlaceholder, setDayPlaceholder] = useState<string>("Day Schedule*");
-  const [timeStart, setTimeStart] = useState<string>("");
-  const [timeEnd, setTimeEnd] = useState<string>("");
+const ClassForm = ({
+  isVisible,
+  setIsVisible,
+  classNamePlaceholder,
+  descriptionPlaceholder,
+  daySchedulePlaceholder,
+  timeStartPlaceholder,
+  timeEndPlaceholder,
+  action,
+}: Props) => {
+  const [className, setClassName] = useState<string>(classNamePlaceholder);
+  const [description, setDescription] = useState<string>(
+    descriptionPlaceholder
+  );
+  const [daySchedule, setDaySchedule] = useState<string>(
+    daySchedulePlaceholder
+  );
+  const [timeStart, setTimeStart] = useState<string>(timeStartPlaceholder);
+  const [timeEnd, setTimeEnd] = useState<string>(timeEndPlaceholder);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const timeStartRef = useRef<HTMLInputElement>(null);
   const timeEndRef = useRef<HTMLInputElement>(null);
@@ -27,6 +47,8 @@ const ClassForm = ({ visibility, setVisibility }: Props) => {
     "Saturday",
     "Sunday",
   ];
+
+  const { dispatch } = useScheduleContext();
 
   const timeFormatter = (time: string): Date => {
     return new Date(`01/01/1970 ${time}`);
@@ -46,25 +68,52 @@ const ClassForm = ({ visibility, setVisibility }: Props) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if ([className, dayPlaceholder, timeStart, timeEnd].some((item) => !item)) {
+    if ([className, daySchedule, timeStart, timeEnd].some((item) => !item)) {
       return console.log("All required fields must be filled");
     }
     try {
-      const newClass = await postClass(
-        className,
-        description,
-        dayPlaceholder,
-        timeStart,
-        timeEnd
-      );
+      if (action.type === "ADD") {
+        const newClass = await postClass(
+          className,
+          description,
+          daySchedule,
+          timeStart,
+          timeEnd
+        );
 
-      if (newClass.Error) throw Error(newClass.Error);
+        if (newClass.Error) throw Error(newClass.Error);
 
-      setClassName("");
-      setDescription("");
-      setDayPlaceholder("Day Schedule*");
-      setTimeStart("");
-      setTimeEnd("");
+        setClassName("");
+        setDescription("");
+        setDaySchedule("Day Schedule*");
+        setTimeStart("");
+        setTimeEnd("");
+        dispatch({ type: "ADD_CLASS", payload: newClass });
+        setIsVisible((prevState) => !prevState);
+      } else if (action.type === "EDIT") {
+        if (
+          className === classNamePlaceholder &&
+          description === descriptionPlaceholder &&
+          daySchedule === daySchedulePlaceholder &&
+          timeStart === timeStartPlaceholder &&
+          timeEnd === timeEndPlaceholder
+        )
+          return setIsVisible((prevState) => !prevState);
+
+        const editedClass = await updateClass(action.classID, {
+          className,
+          description,
+          daySchedule,
+          timeStart,
+          timeEnd,
+        });
+
+        if (editedClass.Error) throw Error(editedClass.Error);
+
+        dispatch({ type: "EDIT_CLASS", payload: editedClass });
+
+        return setIsVisible((prevState) => !prevState);
+      }
     } catch (error: any) {
       console.log(error);
     }
@@ -72,9 +121,9 @@ const ClassForm = ({ visibility, setVisibility }: Props) => {
 
   return (
     <div
-      className={`bg-[rgba(0,0,0,0.5)]
+      className={`bg-[rgba(0,0,0,0.5)] text-black
                  fixed top-0 left-0
-                 ${visibility ? "flex" : "hidden"}
+                 ${isVisible ? "flex" : "hidden"}
                  justify-center items-center
                  w-screen
                  h-screen z-[60]
@@ -92,7 +141,7 @@ const ClassForm = ({ visibility, setVisibility }: Props) => {
         <div className="flex text-2xl gap-3 text-white">
           <button
             type="button"
-            onClick={() => setVisibility((prevState) => !prevState)}
+            onClick={() => setIsVisible((prevState) => !prevState)}
           >
             <IoArrowBack />
           </button>
@@ -119,8 +168,8 @@ const ClassForm = ({ visibility, setVisibility }: Props) => {
         />
         <CustomSelect
           selectOptions={dayOptions}
-          placeholder={dayPlaceholder}
-          setPlaceholder={setDayPlaceholder}
+          placeholder={daySchedule}
+          setPlaceholder={setDaySchedule}
         />
         <div
           className="flex bg-white w-full rounded-xl

@@ -67,9 +67,7 @@ export const postSignIn = async (req: Request, res: Response) => {
       return res.status(400).json({ Error: "Incorrect password" });
 
     createToken(String(existingUser._id), res);
-    setTimeout(() => {
-      res.json({ username, id: existingUser._id });
-    }, 3000);
+    res.json({ username, id: existingUser._id });
   } catch {
     res.status(400).json({ Error: "Bad Request" });
   }

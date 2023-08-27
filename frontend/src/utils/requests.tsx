@@ -2,9 +2,9 @@ import { NextRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
 
 type stateTypeBoolean = Dispatch<SetStateAction<boolean>>;
-type stateTypeString = Dispatch<SetStateAction<string>>;
-type stateTypeArray = Dispatch<SetStateAction<any[]>>;
-interface argsType {
+// type stateTypeString = Dispatch<SetStateAction<string>>;
+// type stateTypeArray = Dispatch<SetStateAction<any[]>>;
+interface userType {
   username: string;
   firstname: string;
   lastname: string;
@@ -13,11 +13,11 @@ interface argsType {
 }
 
 // Sign Up User through POST Request
-export const postSignUp = async (args: argsType) => {
+export const postSignUp = async (user: userType) => {
   try {
     const signUpUser = await fetch("http://localhost:5000/api/users/signup", {
       method: "POST",
-      body: JSON.stringify(args),
+      body: JSON.stringify(user),
       headers: {
         "Content-Type": "application/json",
       },
@@ -97,10 +97,6 @@ export const postTask = async (
     const newTask = await fetch("http://localhost:5000/api/schedules/tasks", {
       method: "POST",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
       body: JSON.stringify({
         taskName,
         description,
@@ -108,9 +104,61 @@ export const postTask = async (
         type,
         subject,
       }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     const responseJSON = await newTask.json();
+
+    return responseJSON;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+interface taskType {
+  taskName: string;
+  deadline: string;
+  type: string;
+  subject: string;
+  description?: string;
+}
+
+export const updateTask = async (taskID: string, task: taskType) => {
+  try {
+    const updateTask = await fetch(
+      `http://localhost:5000/api/schedules/tasks/${taskID}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(task),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const responseJSON = await updateTask.json();
+
+    return responseJSON;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const deleteTask = async (taskID: string) => {
+  try {
+    const deleteTask = await fetch(
+      `http://localhost:5000/api/schedules/tasks/${taskID}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const responseJSON = await deleteTask.json();
 
     return responseJSON;
   } catch (error: any) {
@@ -146,6 +194,55 @@ export const postClass = async (
     );
 
     const responseJSON = await newClass.json();
+
+    return responseJSON;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+interface classType {
+  className: string;
+  description: string;
+  daySchedule: string;
+  timeStart: string;
+  timeEnd: string;
+}
+
+export const updateClass = async (classID: string, classItem: classType) => {
+  try {
+    const updateClass = await fetch(
+      `http://localhost:5000/api/schedules/classes/${classID}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(classItem),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const responseJSON = await updateClass.json();
+
+    return responseJSON;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const deleteClass = async (classID: string) => {
+  try {
+    const deleteTask = await fetch(
+      `http://localhost:5000/api/schedules/classes/${classID}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const responseJSON = await deleteTask.json();
 
     return responseJSON;
   } catch (error: any) {

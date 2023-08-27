@@ -5,7 +5,7 @@ const AuthorizedHeader = () => {
   return (
     <header
       className="sticky top-0 bg-gray-600 items-center flex justify-center
-                 w-full h-16"
+                 w-full h-16 z-50"
     >
       <div
         className="flex justify-between items-center
