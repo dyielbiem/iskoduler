@@ -21,7 +21,7 @@ export const postSignUp = async (req: Request, res: Response) => {
 
     // Check if username and password is not empty
     if (!username || !password || !firstname || !lastname)
-      return res.status(400).json({ Error: "All fields must be filled" });
+      throw Error("All fields must be filled");
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -48,6 +48,7 @@ export const postSignUp = async (req: Request, res: Response) => {
   }
 };
 
+// Controller to signin a new user through a POST request
 export const postSignIn = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
@@ -70,5 +71,91 @@ export const postSignIn = async (req: Request, res: Response) => {
     res.json({ username, id: existingUser._id });
   } catch {
     res.status(400).json({ Error: "Bad Request" });
+  }
+};
+
+// Authenticate user requests
+export const getAuthenticate = (req: Request, res: Response) => {
+  res.json({ isAuthenticated: true });
+};
+
+export const getUserInformation = async (req: Request, res: Response) => {
+  try {
+    const userID = req.user?._id;
+    const foundUser = await user.findById(userID).select(["-__v", "-password"]);
+
+    res.json(foundUser);
+  } catch (error: any) {
+    res.status(400).json({ Error: error.name });
+  }
+};
+
+export const patchUserName = async (req: Request, res: Response) => {
+  try {
+    const userID = req.user?._id;
+    const { firstname, lastname } = req.body;
+
+    if (!firstname || !lastname)
+      throw Error("Both first and last name are both required");
+
+    const updatedInformation = await user
+      .findByIdAndUpdate(
+        userID,
+        { firstname, lastname },
+        { new: true, runValidators: true }
+      )
+      .select(["_id", "username", "firstname", "lastname"]);
+
+    if (!updatedInformation) throw Error("Bad Request");
+    return res.json(updatedInformation);
+  } catch (error: any) {
+    res.status(400).json({ Error: error.message });
+  }
+};
+
+export const patchUserPassword = async (req: Request, res: Response) => {
+  try {
+    const userID = req.user?._id;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword)
+      throw Error("Both current and new password are required");
+
+    const userPassword = await user.findById(userID).select("password");
+    const checkPassword = await bcrypt.compare(
+      currentPassword,
+      userPassword?.password as string
+    );
+
+    if (!checkPassword) throw Error("Incorrect current password");
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+    const updatedInformation = await user
+      .findByIdAndUpdate(
+        userID,
+        {
+          password: hashedNewPassword,
+        },
+        { new: true }
+      )
+      .select(["username", "_id"]);
+
+    if (!updatedInformation) throw Error("Bad Request");
+
+    return res.json(updatedInformation);
+  } catch (error: any) {
+    res.status(400).json({ Error: error.message });
+  }
+};
+
+// Controller to logout a new user through a GET request
+export const getLogout = (req: Request, res: Response) => {
+  try {
+    res.clearCookie("token", { sameSite: "none", secure: true });
+    res.status(200).json({ Message: "User is logged out" });
+  } catch (error: any) {
+    res.status(400).json({ Error: error.message });
   }
 };

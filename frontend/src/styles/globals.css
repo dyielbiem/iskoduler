@@ -9,9 +9,15 @@ body {
 #__next {
   @apply w-full flex items-center flex-col;
 }
-/* * {
-  @apply border-2 border-green-500;
-} */
+
+* {
+  @apply font-body text-black bg-white;
+}
+
+h1 {
+  @apply font-header;
+}
+
 input[type="time"]::-webkit-calendar-picker-indicator {
   background: none;
 }
@@ -20,6 +26,20 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* input[type="date"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-} */
+input[type="date"],
+input[type="text"],
+input[type="password"] {
+  @apply shadow-md border-[1px] w-full rounded-md font-medium
+  px-2
+  py-2
+  outline-none
+  text-lg;
+}
+
+textarea {
+  @apply shadow-customShadow font-medium;
+}
+
+input::placeholder {
+  @apply font-normal;
+}

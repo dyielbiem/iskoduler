@@ -130,12 +130,12 @@ const ClassForm = ({
                  `}
     >
       <form
-        className="flex flex-col bg-gray-500 
-                   w-screen
+        className="flex flex-col bg-white 
+                   w-screen overflow-y-scroll
                    h-screen
-                   p-2
+                   p-4
                    gap-3
-                   overflow-y-scroll"
+                   text-lg"
         onSubmit={handleSubmit}
       >
         <div className="flex text-2xl gap-3 text-white">
@@ -173,7 +173,7 @@ const ClassForm = ({
         />
         <div
           className="flex bg-white w-full rounded-xl
-                     justify-between   
+                     justify-between shadow-customShadow  
                      py-2
                      px-3"
           onClick={() => setTimeInputFocus(timeStartRef)}
@@ -192,7 +192,7 @@ const ClassForm = ({
         </div>
         <div
           className="flex bg-white w-full rounded-xl
-                     justify-between   
+                     justify-between shadow-customShadow
                      py-2
                      px-3"
           onClick={() => setTimeInputFocus(timeEndRef)}
@@ -212,9 +212,9 @@ const ClassForm = ({
         </div>
         <button
           type="submit"
-          className="bg-blue-400 text-white font-bold
+          className="bg-primary text-white font-bold
                     rounded-full disabled:cursor-not-allowed
-                    text-xl
+                    text-2xl
                     py-3"
           disabled={isButtonDisabled}
         >

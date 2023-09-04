@@ -45,7 +45,7 @@ const DateTimePicker = ({
     >
       <form
         className="flex flex-col justify-center items-center
-                   bg-gray-600 rounded-xl
+                   bg-white rounded-xl
                    w-full
                    max-w-xl
                    gap-4
@@ -55,7 +55,7 @@ const DateTimePicker = ({
       >
         <div className="flex justify-between items-center w-full">
           <h2
-            className="self-start text-white font-bold
+            className="self-start font-bold
                       text-2xl"
           >
             Deadline
@@ -81,8 +81,9 @@ const DateTimePicker = ({
           max={"2100-12-31"}
           className="outline-none rounded-xl bg-white
                      selection:bg-transparent
+                     text-lg
                      py-2 
-                     px-4
+                     px-3
                      w-full"
         />
         <input
@@ -90,16 +91,17 @@ const DateTimePicker = ({
           value={time}
           onChange={(event) => setTime(event.target.value)}
           className="outline-none rounded-xl bg-white
-                     selection:bg-transparent
+                     selection:bg-transparent shadow-customShadow
+                     text-lg
                      py-2 
-                     px-4
+                     px-3
                      w-full"
         />
         <button
           className="text-white bg-blue-500 w-full rounded-full
                     p-2
                     font-bold
-                    text-xl"
+                    text-2xl"
           type="submit"
         >
           Confirm

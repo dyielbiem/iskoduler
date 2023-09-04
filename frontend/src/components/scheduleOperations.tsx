@@ -52,35 +52,36 @@ const ScheduleOperations = ({
   return (
     <div className="relative" ref={optionRef}>
       <BsThreeDots
-        className="fill-gray-200 
-                   cursor-pointer text-2xl"
+        className="fill-black rounded-full p-1.5 hover:bg-gray-300 hover:fill-gray-800
+        cursor-pointer text-3xl"
         onClick={() => setIsOptionVisible((prevState) => !prevState)}
       />
       <ul
-        className={`absolute top-full mt-1 right-0 z-20 rounded-lg
-                   ${isOptionVisible ? "flex" : "hidden"} 
-                   flex-col bg-gray-500
-                   w-56`}
+        className={`absolute top-0 right-0 z-20 rounded-lg
+        ${isOptionVisible ? "flex" : "hidden"} 
+        flex-col shadow-md border-[1px]
+        translate-y-8
+        w-56`}
       >
         <li
           onClick={handleUpdateClick}
           className="flex w-full items-center 
                        cursor-pointer
                        rounded-lg  gap-3 py-3 px-4 
-                       hover:bg-gray-400"
+                       group hover:bg-gray-400"
         >
-          <GiFeather />
-          <p>Edit</p>
+          <GiFeather className="group-hover:bg-gray-400" />
+          <p className="group-hover:bg-gray-400">Edit</p>
         </li>
         <li
           onClick={handleDeleteClick}
           className="flex w-full items-center 
                        cursor-pointer
                        rounded-lg  gap-3 py-3 px-4 
-                       hover:bg-gray-400"
+                       group hover:bg-gray-400"
         >
-          <MdDelete />
-          <p>Delete</p>
+          <MdDelete className="group-hover:bg-gray-400" />
+          <p className="group-hover:bg-gray-400">Delete</p>
         </li>
       </ul>
     </div>

@@ -1,5 +1,6 @@
 import useScheduleContext from "@/customHooks/useScheduleContext";
 import TaskItem from "./taskItem";
+import TaskGroup from "./taskGroup";
 
 const TaskView = () => {
   const { state } = useScheduleContext();
@@ -48,54 +49,15 @@ const TaskView = () => {
   );
 
   return (
-    <div className="flex w-full flex-col gap-4 my-6">
-      {todayTasks.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <h2 className="font-bold text-white text-2xl">Due Today</h2>
-          <ul
-            className={`w-full 
-              gap-2
-              flex 
-              flex-col`}
-          >
-            {todayTasks.map((task, index) => (
-              <TaskItem task={task} key={index} />
-            ))}
-          </ul>
-        </div>
-      )}
+    <div className="flex w-full flex-col gap-6 my-6">
+      {todayTasks.length > 0 && <TaskGroup tasks={todayTasks} header="Today" />}
 
       {tomorrowTasks.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <h2 className="font-bold text-white text-2xl">Due Tommorrow</h2>
-
-          <ul
-            className={`w-full 
-              gap-2
-              flex 
-              flex-col`}
-          >
-            {tomorrowTasks.map((task, index) => (
-              <TaskItem task={task} key={index} />
-            ))}
-          </ul>
-        </div>
+        <TaskGroup tasks={tomorrowTasks} header="Tomorrow" />
       )}
 
       {upcomingTasks.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <h2 className="font-bold text-white text-2xl">Upcoming</h2>
-          <ul
-            className={`w-full 
-              gap-2
-              flex 
-              flex-col`}
-          >
-            {upcomingTasks.map((task, index) => (
-              <TaskItem task={task} key={index} />
-            ))}
-          </ul>
-        </div>
+        <TaskGroup tasks={upcomingTasks} header="Upcoming" />
       )}
     </div>
   );

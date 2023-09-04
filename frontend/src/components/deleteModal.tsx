@@ -43,7 +43,7 @@ const DeleteModal = ({
                   h-screen`}
     >
       <div
-        className="bg-gray-600 rounded-xl
+        className="bg-white rounded-xl
                      flex flex-col justify-center items-center
                      gap-2                 
                      w-11/12
@@ -64,8 +64,8 @@ const DeleteModal = ({
         </p>
         <div>
           <button
-            className="bg-blue-400 rounded-full
-                        font-bold
+            className="bg-primary rounded-full
+                        font-bold text-white
                         py-2 
                         px-5
                         text-lg"

@@ -1,37 +1,29 @@
-import AuthorizedHeader from "@/components/authorizedHeader";
+import Header from "@/components/header";
 import TabSwitcher from "@/components/tabSwitcher";
 import AddSchedule from "@/components/addSchedule";
 import Schedules from "@/components/schedules";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { getSchedules } from "@/utils/requests";
 import TaskForm from "@/components/taskForm";
 import ClassForm from "@/components/classForm";
 import useScheduleContext from "@/customHooks/useScheduleContext";
+import protectRoute from "@/utils/protectRoute";
 
 type viewType = "class" | "task";
 
-const Home = () => {
+const SchedulesPage = () => {
   const { dispatch } = useScheduleContext();
   const [viewOption, setViewOption] = useState<viewType>("task");
-  const router = useRouter();
   const [isTaskFormVisible, setIsTaskFormVisible] = useState<boolean>(false);
   const [isClassFormVisible, setIsClassFormVisible] = useState<boolean>(false);
 
   // Fetch all tasks and classes through GET Request
   const fetchSchedules = async () => {
-    try {
-      const fetchedSchedules = await getSchedules();
-      if (fetchedSchedules.Error) throw Error(fetchedSchedules.Error);
-      dispatch({ type: "GET_TASKS", payload: fetchedSchedules.Tasks });
-      dispatch({ type: "GET_CLASSES", payload: fetchedSchedules.Classes });
-    } catch (error: any) {
-      if (error.message === "Unauthorized") {
-        router.push("/");
-      } else {
-        console.log(error);
-      }
-    }
+    const fetchedSchedules = await getSchedules();
+    if (Object.hasOwn(fetchedSchedules, "Error"))
+      return console.log(fetchedSchedules.Error);
+    dispatch({ type: "GET_TASKS", payload: fetchedSchedules.Tasks });
+    dispatch({ type: "GET_CLASSES", payload: fetchedSchedules.Classes });
   };
 
   useEffect(() => {
@@ -44,10 +36,10 @@ const Home = () => {
 
   return (
     <>
-      <AuthorizedHeader />
+      <Header isPreviousVisible={true} isProfileVisible={true} />
       <main
         className="flex flex-col items-center
-                   w-[95%]"
+                   w-11/12"
       >
         <TabSwitcher viewOption={viewOption} setViewOption={setViewOption} />
         <Schedules viewOption={viewOption} />
@@ -80,4 +72,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default protectRoute(SchedulesPage);

@@ -19,7 +19,7 @@ const app = express();
 app.use(cors({
     origin: "http://localhost:3000",
     methods: ["GET", "POST", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
     credentials: true,
 }));
 // Check the path and method of the HTTP request

@@ -27,7 +27,7 @@ const TaskItem = ({ task }: Props) => {
   // Format for display deadline
   const timeFormatter = Intl.DateTimeFormat("en-US", {
     timeZone: userTimeZone,
-    dateStyle: "long",
+    dateStyle: "medium",
     timeStyle: "short",
   });
 
@@ -50,15 +50,25 @@ const TaskItem = ({ task }: Props) => {
 
   return (
     <li
-      className="text-white bg-gray-700 rounded-2xl
-                flex flex-col
-                px-4
-                py-3"
+      className={`text-white bg-white rounded-lg
+      shadow-md border-gray-200 border-[1px] relative
+      before:h-full before:content-[''] before:rounded-l-md
+      before:w-2 before:absolute before:top-0 before:left-0
+      ${
+        task.type === "Activity" ? "before:bg-activity" : "before:bg-assignment"
+      }
+      flex flex-col
+      pl-6
+      pr-4
+      py-3`}
     >
       <div className="flex justify-between items-center">
-        <p className="text-sm">
-          {timeFormatter.format(new Date(task.deadline))}
-        </p>
+        <h3
+          className="font-bold
+                     text-xl"
+        >
+          {task.taskName}
+        </h3>
         <ScheduleOperations
           isOptionVisible={isOptionVisible}
           setIsOptionVisible={setIsOptionVisible}
@@ -66,14 +76,24 @@ const TaskItem = ({ task }: Props) => {
           setIsFormVisible={setIsTaskFormVisible}
         />
       </div>
-      <h2
-        className="font-bold
-                     text-xl"
-      >
-        {task.taskName}
-      </h2>
-      <p className="text-sm">{`${task.type} • ${task.subject}`}</p>
+      <p className="text-sm">{timeFormatter.format(new Date(task.deadline))}</p>
+
+      <p className="text-sm">{task.subject}</p>
       <p>{task.description}</p>
+      <p
+        className={`border-2 rounded-full font-bold
+        w-fit self-end
+        ${
+          task.type === "Activity"
+            ? "border-activity text-activity"
+            : "border-assignment text-assignment"
+        }
+        text-base
+        px-4 
+        py-1`}
+      >
+        {task.type}
+      </p>
       <DeleteModal
         isThisVisible={isDeleteTaskModalVisible}
         setIsThisVisible={setIsDeleteTaskModalVisible}

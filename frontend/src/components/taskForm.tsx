@@ -121,9 +121,9 @@ const TaskForm = ({
                  w-screen`}
     >
       <form
-        className="bg-gray-600 overflow-y-scroll
+        className="bg-white overflow-y-scroll
                      flex flex-col
-                     gap-3 
+                     gap-4 
                      h-screen 
                      w-screen 
                      p-2
@@ -141,7 +141,7 @@ const TaskForm = ({
           >
             <IoArrowBack />
           </button>
-          <h2 className="text-white font-bold text-2xl">Add new task</h2>
+          <h2 className="text-black font-bold text-2xl">Add new task</h2>
         </div>
         <input
           type="text"
@@ -149,6 +149,7 @@ const TaskForm = ({
           value={taskName}
           onChange={(event) => setTaskName(event.target.value)}
           className="w-full rounded-xl outline-none
+                     text-lg
                      py-2
                      px-3"
         />
@@ -158,6 +159,7 @@ const TaskForm = ({
           value={description}
           onChange={(event) => setDescription(event.target.value)}
           className="w-full rounded-xl outline-none resize-none 
+                     text-lg
                      py-2
                      px-3"
         />
@@ -167,6 +169,7 @@ const TaskForm = ({
           value={subject}
           onChange={(event) => setSubject(event.target.value)}
           className="w-full rounded-xl outline-none
+                     text-lg
                      py-2
                      px-3"
         />
@@ -177,7 +180,8 @@ const TaskForm = ({
         />
         <div
           className="w-full rounded-xl outline-none flex justify-between
-                     items-center bg-white cursor-pointer
+                     items-center cursor-pointer shadow-customShadow font-medium
+                     text-lg
                      py-2
                      px-3"
           onClick={() => setIsDateTimePickerVisible((prevState) => !prevState)}
@@ -193,9 +197,9 @@ const TaskForm = ({
         </div>
         <button
           type="submit"
-          className="bg-blue-400 text-white font-bold
+          className="bg-primary text-white font-bold
                     rounded-full
-                    text-xl
+                    text-2xl
                     py-3"
         >
           Submit

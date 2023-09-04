@@ -5,10 +5,9 @@ const useScheduleContext = () => {
   const context = useContext(ScheduleContext);
 
   if (!context) {
-    throw Error("useScheduleContext is not accessible");
+    throw Error("useScheduleContext is not available");
   }
   return context;
 };
-``;
 
 export default useScheduleContext;

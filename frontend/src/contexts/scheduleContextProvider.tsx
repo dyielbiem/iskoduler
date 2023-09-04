@@ -38,10 +38,6 @@ interface scheduleContextType {
   dispatch: Dispatch<Action>;
 }
 
-export const ScheduleContext = createContext<scheduleContextType | undefined>(
-  undefined
-);
-
 interface Props {
   children: ReactNode;
 }
@@ -139,6 +135,10 @@ const scheduleReducer = (state: State, action: Action) => {
       return state;
   }
 };
+
+export const ScheduleContext = createContext<scheduleContextType | undefined>(
+  undefined
+);
 
 const ScheduleContextProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(scheduleReducer, {

@@ -52,13 +52,16 @@ const ClassView = () => {
   }
 
   return (
-    <div className="flex flex-col w-full my-6 gap-4">
+    <div className="flex flex-col w-full my-6 gap-6">
       {dailyClassSchedules.length > 0 &&
         dailyClassSchedules.map(
           (classSchedules, classIndex) =>
             classSchedules.length > 0 && (
               <div key={classIndex} className="flex flex-col gap-2">
-                <h2 className="font-bold text-white text-2xl">
+                <h2
+                  className="font-bold text-2xl
+                  px-1"
+                >
                   {classIndex === 0
                     ? "Today"
                     : classIndex === 1

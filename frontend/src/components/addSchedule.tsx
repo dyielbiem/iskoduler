@@ -25,19 +25,19 @@ const AddSchedule = ({ setIsTaskFormVisible, showClassForm }: Props) => {
   return (
     <>
       <button
-        className={`fixed bottom-[6%] right-[6%] bg-blue-500 
+        className={`fixed bottom-[6%] right-[6%] bg-primary 
                    rounded-full text-white
                    ${isTypeVisible ? "hidden" : "inline-block"}
                    p-3
                    text-3xl`}
         onClick={() => setIsTypeVisible((prevState) => !prevState)}
       >
-        <MdAdd />
+        <MdAdd className="fill-white bg-primary" />
       </button>
 
       <div
         className={`items-start flex-col
-                   rounded-t-xl fixed bg-gray-200
+                   rounded-t-xl fixed bg-white shadow-customShadow
                    ${isTypeVisible ? "flex" : "hidden"}
                    gap-2
                    w-full

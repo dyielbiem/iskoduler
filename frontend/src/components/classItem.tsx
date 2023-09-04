@@ -36,16 +36,23 @@ const ClassItem = ({ classItem }: Props) => {
   return (
     <li
       key={classItem._id}
-      className="text-white bg-gray-700 rounded-2xl
-                       p-3 flex flex-col"
+      className="text-white bg-white rounded-lg
+      flex flex-col relative before:rounded-l-md
+      border-[1px] shadow-md
+      before:content-[''] before:absolute before:h-full
+      before:w-2 before:top-0 before:left-0
+      before:bg-primary
+      py-4
+      pl-6
+      pr-4"
     >
-      <div className="flex justify-between items-center w-full">
-        <h2
+      <div className="flex justify-between w-full">
+        <h3
           className="font-bold
                          text-xl"
         >
           {classItem.className}
-        </h2>
+        </h3>
         <ScheduleOperations
           isOptionVisible={isOptionVisible}
           setIsOptionVisible={setIsOptionVisible}
@@ -54,8 +61,14 @@ const ClassItem = ({ classItem }: Props) => {
         />
       </div>
       <p>{classItem.description}</p>
-      <p>{classItem.daySchedule}</p>
-      <p className="text-sm">
+      <p
+        className="border-2 w-fit self-end
+        rounded-full text-primary border-primary font-bold
+        text-sm
+        mt-3
+        py-2
+        px-4"
+      >
         {`${formatTimeTo12Hours(classItem.timeStart)} - ${formatTimeTo12Hours(
           classItem.timeEnd
         )}`}

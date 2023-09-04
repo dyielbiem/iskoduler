@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { postSignUp } from "@/utils/requests";
+import { postSignUp } from "@/utils/userRequests";
+import { useRouter } from "next/router";
+import { VscLoading } from "react-icons/vsc";
 
 type inputChangeType = React.ChangeEvent<HTMLInputElement>;
 type setInputType = React.Dispatch<React.SetStateAction<string>>;
 
 const SignUpForm = () => {
+  const router = useRouter();
   const [username, setUsername] = useState<string>("");
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [retypePassword, setRetypePassword] = useState<string>("");
   const [isButtonDisable, setIsButtonDisable] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   // Watch the username, firstname, lastname, password and re-type password fields
   useEffect(() => {
     const fields = [username, firstname, lastname, password, retypePassword];
 
-    if (fields.every((field) => String(field).trim())) {
-      if (password === retypePassword) {
-        setIsButtonDisable(false);
-      } else {
-        setIsButtonDisable(true);
-      }
-    } else {
+    if (password && retypePassword && password === retypePassword) {
+      setIsButtonDisable(false);
+      setError("");
+    } else if (password && retypePassword && password !== retypePassword) {
       setIsButtonDisable(true);
+      setError("The password confirmation does not match");
+    } else if (!retypePassword) {
+      setError("");
     }
-  }, [username, firstname, lastname, password, retypePassword]);
+  }, [password, retypePassword]);
 
   // Prevent password input field to accept white space characters
   const handlePasswordInput = (
@@ -39,28 +44,49 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const args = { username, firstname, lastname, password, retypePassword };
-    setIsButtonDisable(true);
-    await postSignUp(args);
 
+    if (
+      [username, firstname, lastname, password, retypePassword].some(
+        (item) => !item
+      )
+    )
+      return setError("All fields must be filled in");
+
+    const body = {
+      username,
+      firstname,
+      lastname,
+      password,
+      retypePassword,
+    };
+
+    setIsButtonDisable(true);
+    setIsLoading(true);
+    const signedUpUser = await postSignUp(body);
+    if (Object.hasOwn(signedUpUser, "Error")) {
+      setIsButtonDisable(false);
+      setIsLoading(false);
+      return setError(signedUpUser.Error);
+    }
+
+    await router.push("/schedules");
     setIsButtonDisable(false);
+    setIsLoading(false);
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col w-full
-              px-[5%]
-              mt-10
-              gap-3"
+      className="flex flex-col w-[90%]
+      gap-4"
     >
       <input
         type="text"
         placeholder="Username"
         value={username}
         onChange={(event) => setUsername(event.target.value)}
-        className="rounded-xl outline-none
-                   px-3 py-3"
+        className="rounded-xl outline-none w-full
+                   px-3 py-2"
       />
       <input
         type="text"
@@ -68,7 +94,7 @@ const SignUpForm = () => {
         value={firstname}
         onChange={(event) => setFirstname(event.target.value)}
         className="rounded-xl outline-none
-                   px-3 py-3 "
+                   px-3 py-2 "
       />
       <input
         type="text"
@@ -76,7 +102,7 @@ const SignUpForm = () => {
         value={lastname}
         onChange={(event) => setLastname(event.target.value)}
         className="rounded-xl outline-none
-                   px-3 py-3 "
+                   px-3 py-2 "
       />
       <input
         type="password"
@@ -84,7 +110,7 @@ const SignUpForm = () => {
         value={password}
         onChange={(event) => handlePasswordInput(event, setPassword)}
         className="rounded-xl outline-none
-                   px-3 py-3 "
+                   px-3 py-2 "
       />
       <input
         type="password"
@@ -92,15 +118,24 @@ const SignUpForm = () => {
         value={retypePassword}
         onChange={(event) => handlePasswordInput(event, setRetypePassword)}
         className="rounded-xl outline-none
-                   px-3 py-3 "
+                   px-3 py-2"
       />
+      {error && (
+        <p className="font-semibold text-primary text-left px-2">{error}</p>
+      )}
       <button
         type="submit"
         disabled={isButtonDisable}
-        className="bg-blue-600 rounded-full text-white font-bold
-                    disabled:cursor-not-allowed disabled:opacity-50
-                    px-4 py-4 mt-4"
+        className={`bg-primary rounded-full text-white font-bold
+        disabled:cursor-not-allowed gap-2 items-center
+        ${isLoading ? "disabled:opacity-100" : "disabled:opacity-50"}  
+        text-lg flex justify-center 
+        px-4 py-3 mt-8`}
       >
+        <VscLoading
+          className={`bg-primary fill-white text-2xl animate-spin
+        ${isLoading ? "inline" : "hidden"}`}
+        />
         Sign Up
       </button>
     </form>

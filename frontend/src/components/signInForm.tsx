@@ -1,30 +1,44 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import { postSignIn } from "@/utils/requests";
+import { postSignIn } from "@/utils/userRequests";
+import { VscLoading } from "react-icons/vsc";
+import FormButton from "./formButton";
 
 type inputChangeType = React.ChangeEvent<HTMLInputElement>;
-type setInputType = React.Dispatch<React.SetStateAction<string>>;
 
 const SignInForm = () => {
   const router = useRouter();
-
-  const usernameRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!usernameRef.current?.value || !passwordRef.current?.value)
-      return console.log("The username and password must not be empty");
+    if (!username || !password)
+      return setError("The username and password must not be empty");
 
-    postSignIn(usernameRef.current, passwordRef.current, setIsLoading, router);
+    setIsLoading(true);
+    const loggedInUser = await postSignIn(username, password);
+
+    if (Object.hasOwn(loggedInUser, "Error")) {
+      setIsLoading(false);
+      return setError(loggedInUser.Error);
+    }
+
+    await router.replace("/schedules");
+    setUsername("");
+    setPassword("");
+    setIsLoading(false);
+    setError("");
   };
 
   // Prevent password input field to accept white space characters
   const handlePasswordInput = (event: inputChangeType) => {
     if (event.target.value.at(-1) === " ") {
-      event.target.value = event.target.value.slice(0, -1);
+      setPassword(event.target.value.slice(0, -1));
+    } else {
+      setPassword(event.target.value);
     }
   };
 
@@ -32,41 +46,34 @@ const SignInForm = () => {
     <form
       onSubmit={handleSubmit}
       className="flex flex-col w-full
-              px-[5%]
-              mt-20
-              gap-3"
+      gap-4"
     >
       <input
         type="text"
         placeholder="Username"
-        ref={usernameRef}
-        // onChange={(event) => setUsername(event.target.value)}
+        value={username}
+        onChange={(event) => setUsername(event.target.value)}
         className="rounded-xl outline-none
-                   px-3 py-3 "
+        text-lg
+        px-3 py-2"
       />
       <input
         type="password"
         placeholder="Password"
-        ref={passwordRef}
+        value={password}
         onChange={(event) => handlePasswordInput(event)}
         className="rounded-xl outline-none 
-                   px-3 py-3"
+                   text-lg
+                   px-3 py-2"
       />
-      <button
-        type="submit"
-        className="bg-blue-600 rounded-full text-white font-bold
-                    disabled:cursor-wait
-                    px-4 py-4 mt-4"
-        disabled={isLoading}
-      >
-        Sign In
-      </button>
-      <p className="self-center text-center">
-        {`New to ISKOduler?${" "}`}
-        <Link href="/signup" className="font-bold">
-          Sign Up
-        </Link>
-      </p>
+      {error && (
+        <p className="font-semibold text-primary text-left px-2">{error}</p>
+      )}
+      <FormButton
+        isLoading={isLoading}
+        textButton={"Sign In"}
+        marginTopClass="mt-10"
+      />
     </form>
   );
 };

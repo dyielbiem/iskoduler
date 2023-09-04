@@ -12,38 +12,59 @@ interface Props {
 const TabSwitcher = ({ viewOption, setViewOption }: Props) => {
   return (
     <ul
-      className="rounded-full flex flex-wrap bg-gray-200
-                 justify-center font-semibold items-center
-                 mt-2 gap-0.5 text-lg
-                 p-0.5"
+      className="rounded-full flex flex-nowrap border-white bg-white
+                 shadow-customShadow justify-center font-semibold items-center overflow-hidden
+                 border-[3px] gap-1.5
+                 mt-2 text-lg"
     >
-      <li onClick={() => setViewOption("task")}>
+      <li
+        onClick={() => setViewOption("task")}
+        className="bg-white group flex-shrink-0"
+      >
         <button
           className={`rounded-full flex
                      items-center justify-center 
                      ${
                        viewOption === "task"
-                         ? "text-white bg-gray-600"
-                         : "text-gray-600"
+                         ? "text-white bg-primary"
+                         : "text-black bg-white group-hover:bg-gray-300"
                      }
                      gap-2
                      px-4
                      py-1`}
         >
-          <GoTasklist className="text-xl" />
+          <GoTasklist
+            className={`text-xl 
+                      ${
+                        viewOption === "task"
+                          ? "fill-white bg-primary"
+                          : "fill-black bg-white group-hover:bg-gray-300"
+                      }`}
+          />
           Tasks
         </button>
       </li>
-      <li onClick={() => setViewOption("class")}>
+      <li onClick={() => setViewOption("class")} className="bg-white group">
         <button
           className={`rounded-full flex
-          items-center justify-center 
-          ${viewOption === "class" ? "text-white bg-gray-600" : "text-gray-600"}
+          items-center justify-center
+          ${
+            viewOption === "class"
+              ? "text-white bg-primary"
+              : "text-black bg-white group-hover:bg-gray-300"
+          }
           gap-2
           px-4
           py-1`}
         >
-          <BsFillPeopleFill className="text-xl" />
+          <BsFillPeopleFill
+            className={`text-xl 
+            ${
+              viewOption === "class"
+                ? "fill-white bg-primary"
+                : "fill-black bg-white group-hover:bg-gray-300"
+            }`}
+          />
           Classes
         </button>
       </li>

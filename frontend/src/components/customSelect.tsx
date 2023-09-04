@@ -20,7 +20,11 @@ const CustomSelect = ({
   };
 
   return (
-    <div className="w-full relative">
+    <div
+      className="w-full relative shadow-customShadow 
+      font-medium rounded-xl
+      text-lg"
+    >
       <div
         placeholder="Title"
         className="w-full rounded-xl outline-none flex justify-between
@@ -43,8 +47,10 @@ const CustomSelect = ({
       <ul
         className={`${
           optionsVisibility ? "flex" : "hidden"
-        } w-full flex-col bg-white absolute
-                       rounded-xl gap-px mt-px overflow-y-scroll`}
+        } w-full flex-col bg-white absolute 
+        shadow-customShadow font-medium
+        rounded-xl gap-px mt-[2px] overflow-y-scroll
+        max-h-60`}
       >
         {selectOptions.map((option, index) => (
           <li
