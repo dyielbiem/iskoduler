@@ -1,7 +1,5 @@
-import { BsFillPeopleFill } from "react-icons/bs";
+import { FaPeopleRoof } from "react-icons/fa6";
 import { GoTasklist } from "react-icons/go";
-
-type visibilityType = "tasks" | "classes";
 
 type viewType = "class" | "task";
 
@@ -12,58 +10,58 @@ interface Props {
 const TabSwitcher = ({ viewOption, setViewOption }: Props) => {
   return (
     <ul
-      className="rounded-full flex flex-nowrap border-white bg-white
-                 shadow-customShadow justify-center font-semibold items-center overflow-hidden
-                 border-[3px] gap-1.5
-                 mt-2 text-lg"
+      className="rounded-full flex flex-nowrap border-tertiary bg-none
+        shadow-customShadow border-[3px]  justify-center font-semibold items-center overflow-hidden w-fit
+        gap-1
+        text-lg md:text-xl"
     >
       <li
         onClick={() => setViewOption("task")}
-        className="bg-white group flex-shrink-0"
+        className="bg-tertiary group flex-shrink-0"
       >
         <button
           className={`rounded-full flex
-                     items-center justify-center 
-                     ${
-                       viewOption === "task"
-                         ? "text-white bg-primary"
-                         : "text-black bg-white group-hover:bg-gray-300"
-                     }
-                     gap-2
-                     px-4
-                     py-1`}
+            items-center justify-center
+            ${
+              viewOption === "task"
+                ? "text-tertiary bg-primary"
+                : "text-black bg-tertiary group-hover:bg-gray-300"
+            }
+            gap-2
+            px-4 md:px-5
+            py-1 md:py-1.5`}
         >
           <GoTasklist
-            className={`text-xl 
-                      ${
-                        viewOption === "task"
-                          ? "fill-white bg-primary"
-                          : "fill-black bg-white group-hover:bg-gray-300"
-                      }`}
+            className={`text-rounded-full md:text-xl
+              ${
+                viewOption === "task"
+                  ? "fill-tertiary bg-primary"
+                  : "fill-black bg-tertiary group-hover:bg-gray-300"
+              }`}
           />
           Tasks
         </button>
       </li>
-      <li onClick={() => setViewOption("class")} className="bg-white group">
+      <li onClick={() => setViewOption("class")} className="bg-tertiary group">
         <button
           className={`rounded-full flex
-          items-center justify-center
-          ${
-            viewOption === "class"
-              ? "text-white bg-primary"
-              : "text-black bg-white group-hover:bg-gray-300"
-          }
-          gap-2
-          px-4
-          py-1`}
-        >
-          <BsFillPeopleFill
-            className={`text-xl 
+            items-center justify-center
             ${
               viewOption === "class"
-                ? "fill-white bg-primary"
-                : "fill-black bg-white group-hover:bg-gray-300"
-            }`}
+                ? "text-tertiary bg-primary"
+                : "text-black bg-tertiary group-hover:bg-gray-300"
+            }
+            gap-2
+            px-4 md:px-5
+            py-1 md:py-1.5`}
+        >
+          <FaPeopleRoof
+            className={`text-rounded-full md:text-xl
+              ${
+                viewOption === "class"
+                  ? "fill-tertiary bg-primary"
+                  : "fill-black bg-tertiary group-hover:bg-gray-300"
+              }`}
           />
           Classes
         </button>

@@ -2,7 +2,7 @@ import { patchUserName } from "@/utils/userRequests";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useUserContext from "@/customHooks/useUserContext";
-import FormButton from "./formButton";
+import FormButton from "./FormButton";
 
 type formType = "name" | "password" | undefined;
 

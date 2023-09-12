@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { postSignIn } from "@/utils/userRequests";
 import { VscLoading } from "react-icons/vsc";
-import FormButton from "./formButton";
+import FormButton from "./FormButton";
 
 type inputChangeType = React.ChangeEvent<HTMLInputElement>;
 
@@ -45,7 +45,9 @@ const SignInForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col w-full
+      className="flex flex-col 
+      w-full
+      max-w-md
       gap-4"
     >
       <input
@@ -72,7 +74,7 @@ const SignInForm = () => {
       <FormButton
         isLoading={isLoading}
         textButton={"Sign In"}
-        marginTopClass="mt-10"
+        marginTopClass="mt-12"
       />
     </form>
   );

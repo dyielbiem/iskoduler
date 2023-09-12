@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ScheduleOperations from "./scheduleOperations";
-import DeleteModal from "./deleteModal";
-import TaskForm from "./taskForm";
+import ScheduleOperations from "./ScheduleOperations";
+import DeleteModal from "./DeleteModal";
+import TaskForm from "./TaskForm";
 import { parse, format } from "date-fns";
 
 interface taskType {
@@ -50,25 +50,31 @@ const TaskItem = ({ task }: Props) => {
 
   return (
     <li
-      className={`text-white bg-white rounded-lg
-      shadow-md border-gray-200 border-[1px] relative
+      className={`text-white bg-tertiary rounded-xl 
+      shadow-lg border-2 border-zinc-200 relative
       before:h-full before:content-[''] before:rounded-l-md
       before:w-2 before:absolute before:top-0 before:left-0
       ${
-        task.type === "Activity" ? "before:bg-activity" : "before:bg-assignment"
+        task.type === "Activity"
+          ? "before:bg-activity"
+          : "before:bg-assignment "
       }
+      text-base
       flex flex-col
-      pl-6
-      pr-4
-      py-3`}
+      pl-6 md:pl-8
+      pr-4 md:pr-6 
+      py-5`}
     >
-      <div className="flex justify-between items-center">
-        <h3
-          className="font-bold
-                     text-xl"
-        >
-          {task.taskName}
-        </h3>
+      <div className="flex justify-between items-center bg-tertiary">
+        <div className="flex flex-col">
+          <p className="leading-none">{task.subject}</p>
+          <h3
+            className="font-bold bg-tertiary leading-none
+            text-lg md:text-xl"
+          >
+            {task.taskName}
+          </h3>
+        </div>
         <ScheduleOperations
           isOptionVisible={isOptionVisible}
           setIsOptionVisible={setIsOptionVisible}
@@ -76,24 +82,36 @@ const TaskItem = ({ task }: Props) => {
           setIsFormVisible={setIsTaskFormVisible}
         />
       </div>
-      <p className="text-sm">{timeFormatter.format(new Date(task.deadline))}</p>
-
-      <p className="text-sm">{task.subject}</p>
-      <p>{task.description}</p>
       <p
-        className={`border-2 rounded-full font-bold
-        w-fit self-end
-        ${
-          task.type === "Activity"
-            ? "border-activity text-activity"
-            : "border-assignment text-assignment"
-        }
-        text-base
-        px-4 
-        py-1`}
+        className={`bg-tertiary
+        ${task.type === "Activity" ? "text-activity" : "text-assignment"}
+        font-bold
+        my-1.5`}
       >
-        {task.type}
+        {timeFormatter.format(new Date(task.deadline))}{" "}
       </p>
+      <p
+        className="bg-tertiary max-w-[40ch]
+        text-base"
+      >
+        {task.description}
+      </p>
+      <div className="w-full flex-1 flex flex-col items-end justify-end">
+        <p
+          className={`border-2 rounded-full font-bold
+          w-fit self-end bg-tertiary mt-2
+          ${
+            task.type === "Activity"
+              ? "border-activity text-activity"
+              : "border-assignment text-assignment"
+          }
+          text-base md:text-lg
+          px-4
+          py-1`}
+        >
+          {task.type}
+        </p>
+      </div>
       <DeleteModal
         isThisVisible={isDeleteTaskModalVisible}
         setIsThisVisible={setIsDeleteTaskModalVisible}

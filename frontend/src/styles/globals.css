@@ -11,7 +11,7 @@ body {
 }
 
 * {
-  @apply font-body text-black bg-white;
+  @apply font-body text-black bg-white box-border m-0 p-0;
 }
 
 h1 {
@@ -28,18 +28,28 @@ button {
 
 input[type="date"],
 input[type="text"],
-input[type="password"] {
-  @apply shadow-md border-[1px] w-full rounded-md font-medium
+input[type="password"],
+input[type="time"] {
+  @apply shadow-md border-[1px] w-full rounded-md font-semibold
   px-2
-  py-2
+  py-3
   outline-none
-  text-lg;
+  text-base;
 }
 
 textarea {
-  @apply shadow-customShadow font-medium;
+  @apply shadow-md border-[1px] w-full rounded-md font-semibold
+  placeholder:font-normal
+  px-2
+  py-3
+  outline-none
+  text-base;
 }
 
 input::placeholder {
   @apply font-normal;
+}
+
+.masonry > li:nth-child(3n) {
+  background-color: aqua;
 }

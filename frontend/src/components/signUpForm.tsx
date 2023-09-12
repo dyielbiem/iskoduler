@@ -77,7 +77,8 @@ const SignUpForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col w-[90%]
+      className="flex flex-col w-full
+      max-w-md
       gap-4"
     >
       <input
@@ -90,6 +91,7 @@ const SignUpForm = () => {
       />
       <input
         type="text"
+        name="signupFirstname"
         placeholder="First Name"
         value={firstname}
         onChange={(event) => setFirstname(event.target.value)}

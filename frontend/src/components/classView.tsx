@@ -1,18 +1,8 @@
 import useScheduleContext from "@/customHooks/useScheduleContext";
-import ClassItem from "./classItem";
+import ClassItem from "./ClassItem";
 
 const ClassView = () => {
   const { state } = useScheduleContext();
-
-  // const formatTimeTo12Hours = (time24: string): string => {
-  //   const [hours, minutes] = time24.split(":");
-  //   const parsedHours = parseInt(hours, 10);
-
-  //   const period = parsedHours >= 12 ? "PM" : "AM";
-  //   const formattedHours = parsedHours % 12 === 0 ? 12 : parsedHours % 12;
-
-  //   return `${formattedHours}:${minutes} ${period}`;
-  // };
 
   const dayValue: { [key: string]: number } = {
     Sunday: 0,
@@ -52,15 +42,16 @@ const ClassView = () => {
   }
 
   return (
-    <div className="flex flex-col w-full my-6 gap-6">
+    <div className="flex flex-col w-full my-6 gap-6 max-w-7xl">
       {dailyClassSchedules.length > 0 &&
         dailyClassSchedules.map(
           (classSchedules, classIndex) =>
             classSchedules.length > 0 && (
-              <div key={classIndex} className="flex flex-col gap-2">
+              <div key={classIndex} className="flex flex-col gap-4">
                 <h2
-                  className="font-bold text-2xl
-                  px-1"
+                  className="font-bold 
+                  px-1
+                  text-xl md:text-2xl"
                 >
                   {classIndex === 0
                     ? "Today"
@@ -69,10 +60,10 @@ const ClassView = () => {
                     : classSchedules[0].daySchedule}
                 </h2>
                 <ul
-                  className={`w-full 
-                  gap-2
-                  flex 
-                  flex-col`}
+                  className={`w-full grid
+                  grid-cols-1 md:grid-cols-2
+                  gap-y-6
+                  gap-x-6 lg:gap-x-8`}
                 >
                   {classSchedules.map((classItem, index) => (
                     <ClassItem classItem={classItem} key={index} />

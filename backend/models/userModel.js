@@ -4,7 +4,7 @@ const userSchema = new MongooseSchema({
     username: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     firstname: {
         type: String,
@@ -16,8 +16,12 @@ const userSchema = new MongooseSchema({
     },
     password: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
+    imageID: {
+        type: String,
+        default: "",
+    },
 });
-const user = mongoose.model('user', userSchema, 'users');
+const user = mongoose.model("user", userSchema, "users");
 export default user;

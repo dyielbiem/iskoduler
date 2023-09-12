@@ -14,9 +14,9 @@ const ManageTab = ({ label, showForm, form }: Props) => {
       onClick={() => showForm(form)}
       className="border-2 border-gray-200 shadow-sm w-full rounded-lg
           flex justify-between items-center hover:cursor-pointer
-          px-3
-          py-2.5
-          text-lg"
+          px-2.5
+          py-3
+          text-base"
     >
       <span className="select-none">{label}</span>
       <GrDown className="text-sm" />

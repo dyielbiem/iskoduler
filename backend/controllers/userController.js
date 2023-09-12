@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import user from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { v2 as cloudinary } from "cloudinary";
+import { Readable } from "stream";
 // Function for creating jsonwebtoken
 const createToken = (_id, res) => {
     const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3h" });
@@ -75,17 +77,25 @@ export const postSignIn = (req, res) => __awaiter(void 0, void 0, void 0, functi
 export const getAuthenticate = (req, res) => {
     res.json({ isAuthenticated: true });
 };
+// Controller for providing all the information of user
 export const getUserInformation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     try {
         const userID = (_b = req.user) === null || _b === void 0 ? void 0 : _b._id;
-        const foundUser = yield user.findById(userID).select(["-__v", "-password"]);
-        res.json(foundUser);
+        let foundUser = yield user.findById(userID).select(["-__v", "-password"]);
+        cloudinary.config({
+            cloud_name: process.env.CLOUD_NAME,
+            api_key: process.env.CLOUD_API_KEY,
+            api_secret: process.env.CLOUD_API_SECRET,
+        });
+        const imageURL = cloudinary.url(foundUser.imageID);
+        res.json(Object.assign(Object.assign({}, foundUser === null || foundUser === void 0 ? void 0 : foundUser.toObject()), { imageURL }));
     }
     catch (error) {
-        res.status(400).json({ Error: error.name });
+        res.status(400).json({ Error: error.message });
     }
 });
+// Controller for updating user's name
 export const patchUserName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c;
     try {
@@ -104,6 +114,7 @@ export const patchUserName = (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.status(400).json({ Error: error.message });
     }
 });
+// Controller for updating user's password
 export const patchUserPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _d;
     try {
@@ -140,3 +151,71 @@ export const getLogout = (req, res) => {
         res.status(400).json({ Error: error.message });
     }
 };
+// Function to upload user's image to cloudinary from request
+function uploadStream(buffer) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise((resolve, reject) => {
+            const theTransformStream = cloudinary.uploader.upload_stream({
+                folder: "ISKOduler",
+            }, (error, result) => {
+                if (error)
+                    return reject(error);
+                resolve(result);
+            });
+            let readableBuffer = Readable.from(buffer);
+            readableBuffer.pipe(theTransformStream);
+        });
+    });
+}
+// Controller for uploading user's image
+export const patchUserImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
+    try {
+        if (!((_e = req.file) === null || _e === void 0 ? void 0 : _e.buffer))
+            throw Error("There is no image uploaded");
+        cloudinary.config({
+            cloud_name: process.env.CLOUD_NAME,
+            api_key: process.env.CLOUD_API_KEY,
+            api_secret: process.env.CLOUD_API_SECRET,
+        });
+        const userID = (_f = req.user) === null || _f === void 0 ? void 0 : _f._id;
+        const retrievedUser = yield user.findById(userID).select(["imageID"]);
+        const uploadedImage = yield uploadStream(req.file.buffer);
+        const updatedImageID = yield user
+            .findByIdAndUpdate(userID, {
+            imageID: uploadedImage.public_id,
+        }, { new: true })
+            .select(["imageID"]);
+        res.json(updatedImageID);
+        if (retrievedUser === null || retrievedUser === void 0 ? void 0 : retrievedUser.imageID)
+            yield cloudinary.uploader.destroy(retrievedUser.imageID);
+    }
+    catch (error) {
+        res.json({ Error: error.message });
+    }
+});
+// Controller for deleting user's image
+export const deleteUserImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _g;
+    try {
+        const userID = (_g = req.user) === null || _g === void 0 ? void 0 : _g._id;
+        const retrievedUser = yield user.findById(userID).select(["imageID"]);
+        if (!(retrievedUser === null || retrievedUser === void 0 ? void 0 : retrievedUser.imageID))
+            throw Error("User does not have display image");
+        cloudinary.config({
+            cloud_name: process.env.CLOUD_NAME,
+            api_key: process.env.CLOUD_API_KEY,
+            api_secret: process.env.CLOUD_API_SECRET,
+        });
+        const updatedUser = yield user
+            .findByIdAndUpdate(userID, {
+            imageID: "",
+        }, { new: true })
+            .select(["imageID"]);
+        res.json(updatedUser);
+        yield cloudinary.uploader.destroy(retrievedUser.imageID);
+    }
+    catch (error) {
+        res.json({ Error: error.message });
+    }
+});

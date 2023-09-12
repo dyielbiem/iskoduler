@@ -10,12 +10,12 @@ const config: Config = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    screens: {
-      sm: "480px",
-      md: "768px",
-      lg: "1024px",
-      xl: "1200px",
-    },
+    // screens: {
+    //   sm: "480px",
+    //   md: "768px",
+    //   lg: "1024px",
+    //   xl: "1200px",
+    // },
     extend: {
       fontFamily: {
         header: ["Playfair Display SC", "sans-serif"],
@@ -24,12 +24,14 @@ const config: Config = {
       colors: {
         primary: "#880000",
         secondary: "#0E5887",
-        white: "#f1f1f1",
-        activity: "#6E0B0B",
+        white: "#eeeeee",
+        tertiary: "#f1efef",
+        activity: "#6E0000",
         assignment: "#056E23",
+        class: "#6E0000",
       },
       boxShadow: {
-        customShadow: "0px 2px 8px -2px rgba(0, 0, 0, 0.5)",
+        customShadow: "0px 1px 7px -3px rgba(0, 0, 0, 0.5)",
       },
     },
   },

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ScheduleOperations from "./scheduleOperations";
-import DeleteModal from "./deleteModal";
-import ClassForm from "./classForm";
+import ScheduleOperations from "./ScheduleOperations";
+import DeleteModal from "./DeleteModal";
+import ClassForm from "./ClassForm";
 
 interface classType {
   _id: string;
@@ -41,15 +41,16 @@ const ClassItem = ({ classItem }: Props) => {
       border-[1px] shadow-md
       before:content-[''] before:absolute before:h-full
       before:w-2 before:top-0 before:left-0
-      before:bg-primary
-      py-4
-      pl-6
-      pr-4"
+      before:bg-class
+      text-base 
+      pl-6 md:pl-8
+      pr-4 md:pr-6 
+      py-5"
     >
       <div className="flex justify-between w-full">
         <h3
           className="font-bold
-                         text-xl"
+          text-lg lg:text-xl"
         >
           {classItem.className}
         </h3>
@@ -63,15 +64,16 @@ const ClassItem = ({ classItem }: Props) => {
       <p>{classItem.description}</p>
       <p
         className="border-2 w-fit self-end
-        rounded-full text-primary border-primary font-bold
-        text-sm
-        mt-3
+        rounded-full text-class border-class font-bold
+        text-sm sm:text-base 
+        mt-8
         py-2
-        px-4"
+        px-4 md:px-6"
       >
-        {`${formatTimeTo12Hours(classItem.timeStart)} - ${formatTimeTo12Hours(
-          classItem.timeEnd
-        )}`}
+        {`${formatTimeTo12Hours(classItem.timeStart).padStart(
+          8,
+          "0"
+        )} - ${formatTimeTo12Hours(classItem.timeEnd).padStart(8, "0")}`}
       </p>
       <DeleteModal
         isThisVisible={isDeleteClassModalVisible}

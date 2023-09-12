@@ -12,7 +12,8 @@ const FormButton = ({ textButton, isLoading, marginTopClass }: Props) => {
       type="submit"
       className={`bg-primary rounded-full text-white font-bold group
         disabled:cursor-wait text-lg flex justify-center items-center
-        px-4 py-3 gap-2 w-full 
+        px-4 py-3 gap-2 w-full
+        lg:text-xl 
         ${marginTopClass}`}
       disabled={isLoading}
     >

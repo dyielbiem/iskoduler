@@ -50,17 +50,17 @@ const ScheduleOperations = ({
   };
 
   return (
-    <div className="relative" ref={optionRef}>
+    <div className="relative bg-tertiary" ref={optionRef}>
       <BsThreeDots
         className="fill-black rounded-full p-1.5 hover:bg-gray-300 hover:fill-gray-800
-        cursor-pointer text-3xl"
+        cursor-pointer text-3xl bg-tertiary"
         onClick={() => setIsOptionVisible((prevState) => !prevState)}
       />
       <ul
         className={`absolute top-0 right-0 z-20 rounded-lg
         ${isOptionVisible ? "flex" : "hidden"} 
         flex-col shadow-md border-[1px]
-        translate-y-8
+        translate-y-8 
         w-56`}
       >
         <li

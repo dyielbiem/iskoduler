@@ -21,23 +21,24 @@ const CustomSelect = ({
 
   return (
     <div
-      className="w-full relative shadow-customShadow 
-      font-medium rounded-xl
-      text-lg"
+      className="w-full relative shadow-md border-[1px]
+      font-medium rounded-md
+      "
     >
       <div
         placeholder="Title"
-        className="w-full rounded-xl outline-none flex justify-between
-                       items-center bg-white cursor-pointer
-                       py-2
-                       px-3"
+        className="w-full rounded-md outline-none flex justify-between
+        items-center bg-white cursor-pointer
+        text-base
+        py-3
+        px-2"
         onClick={() => setOptionsVisibility((prevState) => !prevState)}
       >
         <p
           className={`${
-            placeholder === `${selectOptions[0]}*`
-              ? "text-gray-400"
-              : "text-black"
+            placeholder === `* ${selectOptions[0]}`
+              ? "text-gray-400 font-normal"
+              : "text-black font-semibold"
           }`}
         >
           {placeholder}
@@ -48,8 +49,8 @@ const CustomSelect = ({
         className={`${
           optionsVisibility ? "flex" : "hidden"
         } w-full flex-col bg-white absolute 
-        shadow-customShadow font-medium
-        rounded-xl gap-px mt-[2px] overflow-y-scroll
+        shadow-md border-[1px] font-medium mt-[2px]
+        rounded-md gap-px overflow-y-scroll
         max-h-60`}
       >
         {selectOptions.map((option, index) => (
@@ -58,7 +59,7 @@ const CustomSelect = ({
             onClick={() => selectType(option, index)}
             className={`${
               index === 0 ? "text-gray-400" : "hover:bg-gray-300"
-            } px-3 py-2 rounded-xl cursor-pointer`}
+            } px-3 py-2 rounded-xl cursor-pointer text-base`}
           >
             {option}
           </li>

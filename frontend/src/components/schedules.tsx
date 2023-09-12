@@ -1,6 +1,5 @@
-import useScheduleContext from "@/customHooks/useScheduleContext";
-import TaskView from "./taskView";
-import ClassView from "./classView";
+import TaskView from "./TaskView";
+import ClassView from "./ClassView";
 
 type viewType = "task" | "class";
 

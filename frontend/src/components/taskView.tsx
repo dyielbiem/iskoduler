@@ -1,6 +1,5 @@
 import useScheduleContext from "@/customHooks/useScheduleContext";
-import TaskItem from "./taskItem";
-import TaskGroup from "./taskGroup";
+import TaskGroup from "./TaskGroup";
 
 const TaskView = () => {
   const { state } = useScheduleContext();
@@ -49,7 +48,11 @@ const TaskView = () => {
   );
 
   return (
-    <div className="flex w-full flex-col gap-6 my-6">
+    <div
+      className="flex w-full flex-col my-3
+      max-w-7xl
+      gap-6 md:gap-8 lg:gap-10"
+    >
       {todayTasks.length > 0 && <TaskGroup tasks={todayTasks} header="Today" />}
 
       {tomorrowTasks.length > 0 && (

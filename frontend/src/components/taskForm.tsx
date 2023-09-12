@@ -1,7 +1,6 @@
 import { useState, SetStateAction } from "react";
-import CustomSelect from "./customSelect";
-import { IoCalendarSharp } from "react-icons/io5";
-import DateTimePicker from "./dateTimePicker";
+import CustomSelect from "./CustomSelect";
+import DateTimePicker from "./DateTimePicker";
 import { IoArrowBack } from "react-icons/io5";
 import { postTask, updateTask } from "@/utils/requests";
 import { DateTime } from "luxon";
@@ -29,8 +28,6 @@ const TaskForm = ({
   action,
 }: Props) => {
   const { dispatch } = useScheduleContext();
-  const [isDateTimePickerVisible, setIsDateTimePickerVisible] =
-    useState<boolean>(false);
   const [taskName, setTaskName] = useState<string>(taskNamePlaceholder);
   const [description, setDescription] = useState<string>(
     descriptionPlaceholder
@@ -39,6 +36,28 @@ const TaskForm = ({
   const [type, setType] = useState<string>(typePlaceholder);
   const [deadline, setDeadline] = useState<string>(deadlinePlaceholder);
   const selectOptions: string[] = ["Type", "Activity", "Assignment"];
+  const [error, setError] = useState<string>("");
+  const currentYear: string = String(new Date().getFullYear());
+  const currentMonth: string = String(new Date().getMonth() + 1).padStart(
+    2,
+    "0"
+  );
+  const currentDay: string = String(new Date().getDate()).padStart(2, "0");
+  const stringDate: string = `${currentYear}-${currentMonth}-${currentDay}`;
+
+  const closeForm = () => {
+    // Clear all the fields in the task form
+    if (action.type === "ADD") {
+      setTaskName("");
+      setDescription("");
+      setSubject("");
+      setDeadline("* Deadline");
+      setType("* Type");
+    }
+    // Hide the task form
+    setIsTaskFormVisible((prevState) => !prevState);
+    setError("");
+  };
 
   // Function that will be called when submit is clicked
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -50,84 +69,81 @@ const TaskForm = ({
     // Check if there is an empty required field
     if (
       requiredField.some((field) => !String(field).trim()) ||
-      type === "Type*" ||
-      deadline === "Deadline*"
+      type === "* Type" ||
+      deadline === "* Deadline"
     )
-      return console.log("All required fields must be filled");
+      return setError("All required fields must be filled in");
 
-    try {
-      // Check if action type of the form is to add new task
-      if (action.type === "ADD") {
-        const newTask = await postTask(
-          taskName,
-          String(`${deadline} ${timeZone}`),
-          type,
-          subject,
-          description
-        );
+    // Check if action type of the form is to add new task
+    if (action.type === "ADD") {
+      const newTask = await postTask(
+        taskName,
+        String(`${deadline} ${timeZone}`),
+        type,
+        subject,
+        description
+      );
 
-        if (newTask.Error) throw Error(newTask.Error);
+      if (Object.hasOwn(newTask, "Error")) return setError(newTask.Error);
 
-        // Clear all the fields in the task form
-        setTaskName("");
-        setDescription("");
-        setSubject("");
-        setDeadline("Deadline*");
-        setType("Type*");
+      // Add the new task in the task view
+      dispatch({ type: "ADD_TASK", payload: newTask });
 
-        // Add the new task in the task view
-        dispatch({ type: "ADD_TASK", payload: newTask });
+      closeForm();
+    } else if (action.type === "EDIT") {
+      if (
+        taskName === taskNamePlaceholder &&
+        description === descriptionPlaceholder &&
+        type === typePlaceholder &&
+        subject === subjectPlaceholder &&
+        deadline === deadlinePlaceholder
+      )
+        return setIsTaskFormVisible((prevState) => !prevState);
 
-        // Hide the task form
-        setIsTaskFormVisible((prevState) => !prevState);
-      } else if (action.type === "EDIT") {
-        if (
-          taskName === taskNamePlaceholder &&
-          description === descriptionPlaceholder &&
-          type === typePlaceholder &&
-          subject === subjectPlaceholder &&
-          deadline === deadlinePlaceholder
-        ) {
-          return setIsTaskFormVisible((prevState) => !prevState);
-        }
+      const editedTask = await updateTask(action.taskID, {
+        taskName,
+        deadline: String(`${deadline} ${timeZone}`),
+        type,
+        subject,
+        description,
+      });
 
-        const editedTask = await updateTask(action.taskID, {
-          taskName,
-          deadline: String(`${deadline} ${timeZone}`),
-          type,
-          subject,
-          description,
-        });
+      if (Object.hasOwn(editedTask, "Error")) return setError(editedTask.Error);
 
-        if (editedTask.Error) throw Error(editedTask.Error);
+      // Add the new task in the task view
+      dispatch({ type: "EDIT_TASK", payload: editedTask });
 
-        // // Add the new task in the task view
-        dispatch({ type: "EDIT_TASK", payload: editedTask });
-
-        // Hide the task form
-        setIsTaskFormVisible((prevState) => !prevState);
-      }
-    } catch (error: any) {
-      console.log(error);
+      // Hide the task form and clear error messsage if it exists
+      setIsTaskFormVisible((prevState) => !prevState);
+      setError("");
     }
   };
 
   return (
     <div
-      className={`fixed top-0 left-0 bg-[rgba(0,0,0,0.5)]
-                 justify-center items-center z-50 text-black
-                 ${isTaskFormVisible ? "flex" : "hidden"} 
-                 min-h-screen 
-                 w-screen`}
+      className={`fixed top-0 left-0 bg-transparent
+      justify-center items-center z-50 text-black
+      ${isTaskFormVisible ? "flex flex-col" : "hidden"} 
+      h-screen 
+      w-screen`}
     >
+      <div
+        className="w-full h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.3)]"
+        onClick={closeForm}
+      ></div>
       <form
-        className="bg-white overflow-y-scroll
-                     flex flex-col
-                     gap-4 
-                     h-screen 
-                     w-screen 
-                     p-2
-                     "
+        className="bg-white overflow-y-auto
+        flex flex-col
+        gap-4 
+        sm:max-w-lg
+        sm:max-h-[90%]
+        h-screen sm:h-fit
+        w-full
+        px-2 sm:px-6
+        py-3 sm:py-6
+        sm:rounded-2xl
+        z-10
+        text-base"
         onSubmit={handleSubmit}
       >
         <div
@@ -136,81 +152,71 @@ const TaskForm = ({
         >
           <button
             type="button"
-            onClick={() => setIsTaskFormVisible((prevState) => !prevState)}
+            onClick={closeForm}
             className="text-2xl text-white"
           >
             <IoArrowBack />
           </button>
-          <h2 className="text-black font-bold text-2xl">Add new task</h2>
+          <h2 className="text-black font-bold text-2xl">
+            {action.type === "ADD" ? "Add new" : "Edit"} task
+          </h2>
         </div>
         <input
           type="text"
-          placeholder={"Title*"}
+          placeholder={"* Title"}
           value={taskName}
           onChange={(event) => setTaskName(event.target.value)}
-          className="w-full rounded-xl outline-none
-                     text-lg
-                     py-2
-                     px-3"
+          className="w-full outline-none 
+          text-base
+          py-2
+          px-3"
         />
         <textarea
           rows={3}
           placeholder="Description"
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          className="w-full rounded-xl outline-none resize-none 
-                     text-lg
-                     py-2
-                     px-3"
+          className="w-full outline-none resize-none"
         />
         <input
           type="text"
-          placeholder="Subject*"
+          placeholder="* Subject"
           value={subject}
           onChange={(event) => setSubject(event.target.value)}
           className="w-full rounded-xl outline-none
-                     text-lg
-                     py-2
-                     px-3"
+          py-2
+          px-3"
         />
         <CustomSelect
           selectOptions={selectOptions}
           placeholder={type}
           setPlaceholder={setType}
         />
-        <div
-          className="w-full rounded-xl outline-none flex justify-between
-                     items-center cursor-pointer shadow-customShadow font-medium
-                     text-lg
-                     py-2
-                     px-3"
-          onClick={() => setIsDateTimePickerVisible((prevState) => !prevState)}
-        >
+
+        <DateTimePicker
+          setDeadline={setDeadline}
+          deadline={deadline}
+          minDateTime={stringDate}
+        />
+        {error && (
           <p
-            className={`${
-              deadline === "Deadline*" ? "text-gray-400" : "text-black"
-            }`}
+            className="text-primary font-semibold 
+            text-left px-2"
           >
-            {deadline}
+            {error}
           </p>
-          <IoCalendarSharp />
-        </div>
+        )}
         <button
           type="submit"
-          className="bg-primary text-white font-bold
-                    rounded-full
-                    text-2xl
-                    py-3"
+          className="bg-primary  text-white font-bold
+          rounded-full
+          text-lg
+          mt-8
+          py-3"
         >
           Submit
         </button>
       </form>
-
-      <DateTimePicker
-        setIsDateTimePickerVisible={setIsDateTimePickerVisible}
-        isDateTimePickerVisible={isDateTimePickerVisible}
-        setDeadline={setDeadline}
-      />
     </div>
   );
 };

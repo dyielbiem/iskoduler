@@ -5,6 +5,8 @@ interface userInformationType {
   username: string;
   firstname: string;
   lastname: string;
+  imageID: string;
+  imageURL: string;
 }
 
 interface Props {

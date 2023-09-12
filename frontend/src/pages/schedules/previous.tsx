@@ -1,8 +1,9 @@
-import Header from "@/components/header";
+import Header from "@/components/Header";
 import { getSchedules } from "@/utils/requests";
 import { useEffect } from "react";
 import useScheduleContext from "@/customHooks/useScheduleContext";
-import TaskGroup from "@/components/taskGroup";
+import TaskGroup from "@/components/TaskGroup";
+import protectRoute from "@/utils/protectRoute";
 
 const Previous = () => {
   const { state, dispatch } = useScheduleContext();
@@ -35,19 +36,19 @@ const Previous = () => {
     .sort((a, b) => sortPreviousTask(a.deadline, b.deadline));
 
   return (
-    <>
-      <Header isProfileVisible={true} />
+    <div className="flex flex-col justify-center items-center w-full">
+      <Header isProfileVisible={true} isSchedulesVisible={true} />
       <main
         className="flex flex-col justify-center items-center
-        w-11/12
+        w-11/12 max-w-7xl
         pb-10"
       >
         {state.tasks.length > 0 && (
-          <TaskGroup tasks={previousTasks} header="Previous schedules" />
+          <TaskGroup tasks={previousTasks} header="Previous tasks" />
         )}
       </main>
-    </>
+    </div>
   );
 };
 
-export default Previous;
+export default protectRoute(Previous);

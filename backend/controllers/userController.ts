@@ -2,6 +2,11 @@ import { Request, Response } from "express";
 import user from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { v2 as cloudinary } from "cloudinary";
+import { Readable } from "stream";
+import { Buffer } from "buffer";
+import util from "util";
+import multer from "multer";
 
 // Function for creating jsonwebtoken
 const createToken = (_id: string, res: Response) => {
@@ -79,17 +84,27 @@ export const getAuthenticate = (req: Request, res: Response) => {
   res.json({ isAuthenticated: true });
 };
 
+// Controller for providing all the information of user
 export const getUserInformation = async (req: Request, res: Response) => {
   try {
     const userID = req.user?._id;
-    const foundUser = await user.findById(userID).select(["-__v", "-password"]);
+    let foundUser = await user.findById(userID).select(["-__v", "-password"]);
 
-    res.json(foundUser);
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.CLOUD_API_KEY,
+      api_secret: process.env.CLOUD_API_SECRET,
+    });
+
+    const imageURL = cloudinary.url(foundUser!.imageID);
+
+    res.json({ ...foundUser?.toObject(), imageURL });
   } catch (error: any) {
-    res.status(400).json({ Error: error.name });
+    res.status(400).json({ Error: error.message });
   }
 };
 
+// Controller for updating user's name
 export const patchUserName = async (req: Request, res: Response) => {
   try {
     const userID = req.user?._id;
@@ -113,6 +128,7 @@ export const patchUserName = async (req: Request, res: Response) => {
   }
 };
 
+// Controller for updating user's password
 export const patchUserPassword = async (req: Request, res: Response) => {
   try {
     const userID = req.user?._id;
@@ -157,5 +173,89 @@ export const getLogout = (req: Request, res: Response) => {
     res.status(200).json({ Message: "User is logged out" });
   } catch (error: any) {
     res.status(400).json({ Error: error.message });
+  }
+};
+
+// Function to upload user's image to cloudinary from request
+async function uploadStream(buffer: Buffer) {
+  return new Promise((resolve, reject) => {
+    const theTransformStream = cloudinary.uploader.upload_stream(
+      {
+        folder: "ISKOduler",
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+
+    let readableBuffer = Readable.from(buffer);
+    readableBuffer.pipe(theTransformStream);
+  });
+}
+
+// Controller for uploading user's image
+export const patchUserImage = async (req: Request, res: Response) => {
+  try {
+    if (!req.file?.buffer) throw Error("There is no image uploaded");
+
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.CLOUD_API_KEY,
+      api_secret: process.env.CLOUD_API_SECRET,
+    });
+
+    const userID = req.user?._id;
+    const retrievedUser = await user.findById(userID).select(["imageID"]);
+
+    const uploadedImage: any = await uploadStream(req.file.buffer);
+
+    const updatedImageID = await user
+      .findByIdAndUpdate(
+        userID,
+        {
+          imageID: uploadedImage!.public_id,
+        },
+        { new: true }
+      )
+      .select(["imageID"]);
+
+    res.json(updatedImageID);
+
+    if (retrievedUser?.imageID)
+      await cloudinary.uploader.destroy(retrievedUser.imageID);
+  } catch (error: any) {
+    res.json({ Error: error.message });
+  }
+};
+
+// Controller for deleting user's image
+export const deleteUserImage = async (req: Request, res: Response) => {
+  try {
+    const userID = req.user?._id;
+    const retrievedUser = await user.findById(userID).select(["imageID"]);
+    if (!retrievedUser?.imageID)
+      throw Error("User does not have display image");
+
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.CLOUD_API_KEY,
+      api_secret: process.env.CLOUD_API_SECRET,
+    });
+
+    const updatedUser = await user
+      .findByIdAndUpdate(
+        userID,
+        {
+          imageID: "",
+        },
+        { new: true }
+      )
+      .select(["imageID"]);
+
+    res.json(updatedUser);
+    await cloudinary.uploader.destroy(retrievedUser.imageID);
+  } catch (error: any) {
+    res.json({ Error: error.message });
   }
 };

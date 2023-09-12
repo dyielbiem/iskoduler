@@ -1,5 +1,4 @@
-import TaskItem from "./taskItem";
-import { GiTargeting } from "react-icons/gi";
+import TaskItem from "./TaskItem";
 
 interface taskType {
   _id: string;
@@ -17,19 +16,20 @@ interface Props {
 
 const TaskGroup = ({ tasks, header }: Props) => {
   return (
-    <div className="flex flex-col gap-2 w-full ">
+    <div className="flex flex-col gap-4 w-full">
       <h2
-        className="font-bold text-2xl flex items-center
-        px-1"
+        className="font-bold flex items-center
+        px-1 
+        text-xl md:text-2xl"
       >
         {header}
       </h2>
 
       <ul
-        className={`w-full 
-              gap-4
-              flex 
-              flex-col`}
+        className={`w-full grid
+        grid-cols-1 md:grid-cols-2
+        gap-y-6 lg:gap-y-8
+        gap-x-6 lg:gap-x-8`}
       >
         {tasks.map((task, index) => (
           <TaskItem task={task} key={index} />

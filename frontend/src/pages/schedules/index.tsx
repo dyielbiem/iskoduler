@@ -1,13 +1,13 @@
-import Header from "@/components/header";
-import TabSwitcher from "@/components/tabSwitcher";
-import AddSchedule from "@/components/addSchedule";
-import Schedules from "@/components/schedules";
+import Header from "@/components/Header";
+import TabSwitcher from "@/components/TabSwitcher";
+import Schedules from "@/components/Schedules";
 import { useEffect, useState } from "react";
 import { getSchedules } from "@/utils/requests";
-import TaskForm from "@/components/taskForm";
-import ClassForm from "@/components/classForm";
+import TaskForm from "@/components/TaskForm";
+import ClassForm from "@/components/ClassForm";
 import useScheduleContext from "@/customHooks/useScheduleContext";
 import protectRoute from "@/utils/protectRoute";
+import AddSchedule from "@/components/AddSchedule";
 
 type viewType = "class" | "task";
 
@@ -30,31 +30,39 @@ const SchedulesPage = () => {
     fetchSchedules();
   }, []);
 
-  const showClassForm = () => {
-    setIsClassFormVisible((prevState) => !prevState);
-  };
-
   return (
-    <>
+    <div
+      className="flex flex-col
+      justify-center items-center
+      w-full"
+    >
       <Header isPreviousVisible={true} isProfileVisible={true} />
       <main
         className="flex flex-col items-center
-                   w-11/12"
+        w-11/12"
       >
-        <TabSwitcher viewOption={viewOption} setViewOption={setViewOption} />
+        <div
+          className="flex w-full max-w-7xl items-center
+          justify-center md:justify-between
+          bg-[#eeeeeeee]"
+        >
+          <TabSwitcher viewOption={viewOption} setViewOption={setViewOption} />
+          <AddSchedule
+            isTaskFormVisible={isTaskFormVisible}
+            isClassFormVisible={isClassFormVisible}
+            setIsTaskFormVisible={setIsTaskFormVisible}
+            setIsClassFormVisible={setIsClassFormVisible}
+          />
+        </div>
         <Schedules viewOption={viewOption} />
-        <AddSchedule
-          setIsTaskFormVisible={setIsTaskFormVisible}
-          showClassForm={showClassForm}
-        />
         <TaskForm
           isTaskFormVisible={isTaskFormVisible}
           setIsTaskFormVisible={setIsTaskFormVisible}
           taskNamePlaceholder={""}
           descriptionPlaceholder={""}
           subjectPlaceholder={""}
-          typePlaceholder={"Type*"}
-          deadlinePlaceholder={"Deadline*"}
+          typePlaceholder={"* Type"}
+          deadlinePlaceholder={"* Deadline"}
           action={{ type: "ADD" }}
         />
         <ClassForm
@@ -62,13 +70,13 @@ const SchedulesPage = () => {
           setIsVisible={setIsClassFormVisible}
           classNamePlaceholder=""
           descriptionPlaceholder=""
-          daySchedulePlaceholder="Day Schedule*"
+          daySchedulePlaceholder="* Scheduled day"
           timeStartPlaceholder=""
           timeEndPlaceholder=""
           action={{ type: "ADD" }}
         />
       </main>
-    </>
+    </div>
   );
 };
 
