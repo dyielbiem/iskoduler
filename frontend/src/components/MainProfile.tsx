@@ -13,25 +13,14 @@ const MainProfile = () => {
   const { userInformation, setUserInformation } = useUserContext();
   const { dispatch } = useScheduleContext();
 
-  useEffect(() => {
-    const fetchUserInformation = async () => {
-      const userInformation = await getUserInformation();
-      if (Object.hasOwn(userInformation, "Error"))
-        return console.log(userInformation.Error);
-      setUserInformation(userInformation);
-    };
-
-    fetchUserInformation();
-  }, []);
-
   const handleLogoutClick = async () => {
     const loggedoutUser = await getLogout();
     if (Object.hasOwn(loggedoutUser, "Error")) console.log(loggedoutUser.Error);
 
+    await router.replace("/");
     // Empty the rendered task and classe schedules and user information
-    dispatch({ type: "GET_TASKS", payload: [] });
-    dispatch({ type: "GET_CLASSES", payload: [] });
-    router.replace("/");
+    dispatch({ type: "GET_TASKS", payload: undefined });
+    dispatch({ type: "GET_CLASSES", payload: undefined });
     setUserInformation(undefined);
   };
 
@@ -40,24 +29,24 @@ const MainProfile = () => {
   return (
     <div
       className="flex flex-col justify-between
-      md:justify-self-end 
-      h-full sm:h-[95%]
+      md:justify-self-end  md:max-w-md
+      h-full md:h-[90%]
       md:border-2
       md:rounded-2xl
       md:shadow-lg
-      py-4 md:py-6
+      pt-0 md:pt-6
+      pb-4
       md:px-4 lg:px-6
       w-full
-      max-h-[40rem]
-      max-w-md
+      md:max-h-[40rem]
       md:col-start-2 
       row-start-1"
     >
       <div className="flex flex-col w-full items-center justify-center">
-        <div className="flex items-center justify-center mb-8">
+        <div className="flex items-center justify-center mb-4 md:mb-8">
           <h2
             className="font-bold
-              text-xl md:text-2xl"
+              text-xl sm:text-2xl"
           >
             Profile
           </h2>
@@ -70,7 +59,7 @@ const MainProfile = () => {
                 width={100}
                 height={100}
                 alt="Image of the user"
-                className="w-16 h-full aspect-square rounded-full shadow-customShadow"
+                className="w-16 h-16 object-cover rounded-full shadow-customShadow"
               ></Image>
             ) : (
               <IoPersonCircleSharp className="text-7xl" />

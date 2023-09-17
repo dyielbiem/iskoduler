@@ -38,7 +38,7 @@ const ClassItem = ({ classItem }: Props) => {
       key={classItem._id}
       className="text-white bg-white rounded-lg
       flex flex-col relative before:rounded-l-md
-      border-[1px] shadow-md
+      shadow-lg border-2 border-zinc-200
       before:content-[''] before:absolute before:h-full
       before:w-2 before:top-0 before:left-0
       before:bg-class

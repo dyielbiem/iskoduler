@@ -156,3 +156,44 @@ export const getLogout = async () => {
     return { Error: error.message };
   }
 };
+
+// Upload user's display image through PATCH request
+export const patchUserImage = async (formData: FormData) => {
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/users/information/image",
+      {
+        method: "PATCH",
+        credentials: "include",
+        body: formData,
+      }
+    );
+
+    const responseJSON = await response.json();
+    if (!response.ok) throw Error(responseJSON.Error);
+
+    return responseJSON;
+  } catch (error: any) {
+    return { Error: error.message };
+  }
+};
+
+// Delete user's display image through DELETE request
+export const deleteUserImage = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/users/information/image",
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+
+    const responseJSON = await response.json();
+    if (!response.ok) throw Error(responseJSON.Error);
+
+    return responseJSON;
+  } catch (error: any) {
+    return { Error: error.message };
+  }
+};

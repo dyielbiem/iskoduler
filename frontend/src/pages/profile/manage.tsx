@@ -8,8 +8,10 @@ const Manage = () => {
     <div className="flex flex-col w-full justify-center items-center">
       <Header isSchedulesVisible={true} />
       <main
-        className="w-11/12 max-w-7xl gap-x-4
-        grid items-center justify-items-center
+        className="max-w-7xl gap-x-6
+        grid justify-items-center
+        items-start md:items-center
+        w-11/12 sm:w-10/12 md:w-11/12 xl:w-10/12
         md:grid-cols-2 
         h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)]"
       >

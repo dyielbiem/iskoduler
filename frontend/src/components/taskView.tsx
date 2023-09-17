@@ -1,5 +1,6 @@
 import useScheduleContext from "@/customHooks/useScheduleContext";
 import TaskGroup from "./TaskGroup";
+import NoSchedule from "./NoSchedule";
 
 const TaskView = () => {
   const { state } = useScheduleContext();
@@ -35,6 +36,8 @@ const TaskView = () => {
     );
   };
 
+  if (state.tasks === undefined) return <></>;
+
   const todayTasks = state.tasks.filter((task) =>
     selectTodayTasks(task.deadline)
   );
@@ -47,10 +50,18 @@ const TaskView = () => {
     selectUpcomingTasks(task.deadline)
   );
 
+  if (
+    [todayTasks, tomorrowTasks, upcomingTasks].every(
+      (item) => item.length === 0
+    ) &&
+    state.tasks !== undefined
+  )
+    return <NoSchedule scheduleType="task" />;
+
   return (
     <div
-      className="flex w-full flex-col my-3
-      max-w-7xl
+      className="flex w-full flex-col
+      max-w-7xl mb-16 mt-4 md:mt-8
       gap-6 md:gap-8 lg:gap-10"
     >
       {todayTasks.length > 0 && <TaskGroup tasks={todayTasks} header="Today" />}

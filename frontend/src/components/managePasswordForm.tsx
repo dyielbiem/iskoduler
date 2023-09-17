@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { patchUserPassword } from "@/utils/userRequests";
 import useUserContext from "@/customHooks/useUserContext";
 import FormButton from "./FormButton";
+import validator from "validator";
 
 type formType = "name" | "password" | undefined;
 
@@ -29,6 +30,16 @@ const ManagePasswordForm = ({ visibleForm, setVisibleForm }: Props) => {
     }
   }, [visibleForm]);
 
+  useEffect(() => {
+    if (newPassword && !validator.isStrongPassword(newPassword)) {
+      setError(
+        "Password must be at least 8 characters long with at least 1 uppercase, 1 number, and 1 symbol"
+      );
+    } else {
+      setError("");
+    }
+  }, [newPassword]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
@@ -38,7 +49,13 @@ const ManagePasswordForm = ({ visibleForm, setVisibleForm }: Props) => {
       setIsLoading(false);
       return setError("All fields must be filled in");
     }
-    if (newPassword !== retypeNewPassword) {
+
+    if (!validator.isStrongPassword(newPassword)) {
+      setIsLoading(false);
+      return setError(
+        "Password must be at least 8 characters long with at least 1 uppercase, 1 number, and 1 symbol"
+      );
+    } else if (newPassword !== retypeNewPassword) {
       setIsLoading(false);
       return setError("The password confirmation does not match");
     }

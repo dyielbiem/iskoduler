@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { postSignUp } from "@/utils/userRequests";
 import { useRouter } from "next/router";
 import { VscLoading } from "react-icons/vsc";
+import validator from "validator";
 
 type inputChangeType = React.ChangeEvent<HTMLInputElement>;
 type setInputType = React.Dispatch<React.SetStateAction<string>>;
@@ -19,15 +20,19 @@ const SignUpForm = () => {
 
   // Watch the username, firstname, lastname, password and re-type password fields
   useEffect(() => {
-    const fields = [username, firstname, lastname, password, retypePassword];
-
-    if (password && retypePassword && password === retypePassword) {
+    if (!validator.isStrongPassword(password) && password) {
+      setIsButtonDisable(true);
+      setError(
+        "Password must be at least 8 characters long with at least 1 uppercase, 1 number, and 1 symbol"
+      );
+    } else if (password && retypePassword && password === retypePassword) {
       setIsButtonDisable(false);
       setError("");
     } else if (password && retypePassword && password !== retypePassword) {
       setIsButtonDisable(true);
       setError("The password confirmation does not match");
     } else if (!retypePassword) {
+      setIsButtonDisable(true);
       setError("");
     }
   }, [password, retypePassword]);
@@ -78,7 +83,6 @@ const SignUpForm = () => {
     <form
       onSubmit={handleSubmit}
       className="flex flex-col w-full
-      max-w-md
       gap-4"
     >
       <input

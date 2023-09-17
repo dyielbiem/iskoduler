@@ -1,4 +1,4 @@
-import { deleteTask, deleteClass } from "@/utils/requests";
+import { deleteTask, deleteClass } from "@/utils/schedulesRequests";
 import useScheduleContext from "@/customHooks/useScheduleContext";
 
 interface Props {
@@ -36,19 +36,19 @@ const DeleteModal = ({
   return (
     <div
       className={`bg-[rgba(0,0,0,0.2)] z-50 fixed
-                  top-0 left-0 
-                  ${isThisVisible ? "flex" : "hidden"}
-                  justify-center items-center
-                  w-screen 
-                  h-screen`}
+      top-0 left-0 
+      ${isThisVisible ? "flex" : "hidden"}
+      justify-center items-center
+      w-screen
+      h-screen`}
     >
       <div
         className="bg-white rounded-xl
-                     flex flex-col justify-center items-center
-                     gap-2                 
-                     w-11/12
-                     px-3
-                     py-5"
+        flex flex-col justify-center items-center
+        gap-2                 
+        w-11/12 max-w-sm
+        px-5
+        py-8"
       >
         <h2
           className="font-bold text-center

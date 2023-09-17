@@ -5,8 +5,6 @@ import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import { Readable } from "stream";
 import { Buffer } from "buffer";
-import util from "util";
-import multer from "multer";
 
 // Function for creating jsonwebtoken
 const createToken = (_id: string, res: Response) => {
@@ -96,7 +94,11 @@ export const getUserInformation = async (req: Request, res: Response) => {
       api_secret: process.env.CLOUD_API_SECRET,
     });
 
-    const imageURL = cloudinary.url(foundUser!.imageID);
+    if (!foundUser) throw Error("User does not exist");
+
+    let imageURL = "";
+
+    if (foundUser.imageID) imageURL = cloudinary.url(foundUser.imageID);
 
     res.json({ ...foundUser?.toObject(), imageURL });
   } catch (error: any) {
@@ -220,7 +222,11 @@ export const patchUserImage = async (req: Request, res: Response) => {
       )
       .select(["imageID"]);
 
-    res.json(updatedImageID);
+    if (!updatedImageID) throw Error("User's display image is not updated");
+
+    const imageURL = cloudinary.url(updatedImageID.imageID);
+
+    res.json({ ...updatedImageID.toObject(), imageURL });
 
     if (retrievedUser?.imageID)
       await cloudinary.uploader.destroy(retrievedUser.imageID);

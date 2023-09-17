@@ -88,7 +88,11 @@ export const getUserInformation = (req, res) => __awaiter(void 0, void 0, void 0
             api_key: process.env.CLOUD_API_KEY,
             api_secret: process.env.CLOUD_API_SECRET,
         });
-        const imageURL = cloudinary.url(foundUser.imageID);
+        if (!foundUser)
+            throw Error("User does not exist");
+        let imageURL = "";
+        if (foundUser.imageID)
+            imageURL = cloudinary.url(foundUser.imageID);
         res.json(Object.assign(Object.assign({}, foundUser === null || foundUser === void 0 ? void 0 : foundUser.toObject()), { imageURL }));
     }
     catch (error) {
@@ -186,7 +190,10 @@ export const patchUserImage = (req, res) => __awaiter(void 0, void 0, void 0, fu
             imageID: uploadedImage.public_id,
         }, { new: true })
             .select(["imageID"]);
-        res.json(updatedImageID);
+        if (!updatedImageID)
+            throw Error("User's display image is not updated");
+        const imageURL = cloudinary.url(updatedImageID.imageID);
+        res.json(Object.assign(Object.assign({}, updatedImageID.toObject()), { imageURL }));
         if (retrievedUser === null || retrievedUser === void 0 ? void 0 : retrievedUser.imageID)
             yield cloudinary.uploader.destroy(retrievedUser.imageID);
     }

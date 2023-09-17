@@ -19,18 +19,18 @@ interface classType {
 }
 
 type Action =
-  | { type: "GET_TASKS"; payload: taskType[] }
+  | { type: "GET_TASKS"; payload: taskType[] | undefined }
   | { type: "ADD_TASK"; payload: taskType }
   | { type: "EDIT_TASK"; payload: taskType }
   | { type: "DELETE_TASK"; payload: taskType }
-  | { type: "GET_CLASSES"; payload: classType[] }
+  | { type: "GET_CLASSES"; payload: classType[] | undefined }
   | { type: "ADD_CLASS"; payload: classType }
   | { type: "EDIT_CLASS"; payload: classType }
   | { type: "DELETE_CLASS"; payload: classType };
 
 interface State {
-  tasks: taskType[];
-  classes: classType[];
+  tasks: taskType[] | undefined;
+  classes: classType[] | undefined;
 }
 
 interface scheduleContextType {
@@ -66,6 +66,7 @@ const compareClassBySchedule = (a: classType, b: classType) => {
 const scheduleReducer = (state: State, action: Action) => {
   switch (action.type) {
     case "GET_TASKS":
+      if (!action.payload) return { ...state, tasks: undefined };
       return {
         ...state,
         tasks: action.payload.sort((a, b) =>
@@ -73,6 +74,7 @@ const scheduleReducer = (state: State, action: Action) => {
         ),
       };
     case "ADD_TASK":
+      if (!state.tasks) return { ...state, tasks: [action.payload] };
       return {
         ...state,
         tasks: [action.payload, ...state.tasks].sort((a, b) =>
@@ -80,6 +82,7 @@ const scheduleReducer = (state: State, action: Action) => {
         ),
       };
     case "EDIT_TASK":
+      if (!state.tasks) return state;
       state.tasks.forEach((task) => {
         if (task._id === action.payload._id) {
           task.taskName = action.payload.taskName;
@@ -94,16 +97,19 @@ const scheduleReducer = (state: State, action: Action) => {
         tasks: state.tasks,
       };
     case "DELETE_TASK":
+      if (!state.tasks) return state;
       return {
         ...state,
         tasks: state.tasks.filter((task) => task._id !== action.payload._id),
       };
     case "GET_CLASSES":
+      if (!action.payload) return { ...state, classes: undefined };
       return {
         ...state,
         classes: action.payload.sort((a, b) => compareClassBySchedule(a, b)),
       };
     case "ADD_CLASS":
+      if (!state.classes) return { ...state, classes: [action.payload] };
       return {
         ...state,
         classes: [action.payload, ...state.classes].sort((a, b) =>
@@ -111,6 +117,7 @@ const scheduleReducer = (state: State, action: Action) => {
         ),
       };
     case "EDIT_CLASS":
+      if (!state.classes) return state;
       state.classes.forEach((classItem) => {
         if (classItem._id === action.payload._id) {
           classItem.className = action.payload.className;
@@ -125,6 +132,7 @@ const scheduleReducer = (state: State, action: Action) => {
         classes: state.classes,
       };
     case "DELETE_CLASS":
+      if (!state.classes) return state;
       return {
         ...state,
         classes: state.classes.filter(
@@ -142,8 +150,8 @@ export const ScheduleContext = createContext<scheduleContextType | undefined>(
 
 const ScheduleContextProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(scheduleReducer, {
-    tasks: [],
-    classes: [],
+    tasks: undefined,
+    classes: undefined,
   });
 
   return (

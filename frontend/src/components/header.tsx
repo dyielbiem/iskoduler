@@ -1,7 +1,11 @@
 import { PiCalendarCheckFill } from "react-icons/pi";
 import { IoPersonCircleSharp } from "react-icons/io5";
-import { HiQueueList } from "react-icons/hi2";
+import { BiSolidCalendarWeek } from "react-icons/bi";
 import Link from "next/link";
+import { useEffect } from "react";
+import { getUserInformation } from "@/utils/userRequests";
+import useUserContext from "@/customHooks/useUserContext";
+import Image from "next/image";
 
 type isVisibleType = boolean | undefined;
 
@@ -21,53 +25,83 @@ const Header = ({
   isProfileVisible,
   isPreviousVisible,
 }: Props) => {
+  const { userInformation, setUserInformation } = useUserContext();
+
+  const fetchUserInformation = async () => {
+    const userInformation = await getUserInformation();
+
+    if (userInformation.Error) return console.log(userInformation.Error);
+    setUserInformation(userInformation);
+  };
+
+  useEffect(() => {
+    if (!userInformation) {
+      fetchUserInformation();
+    }
+  }, []);
+
   return (
     <header
       className="sticky top-0 items-center flex justify-center
-      w-full z-50 bg-transparent p-0 border-none
-      h-16 md:h-20"
+      w-full z-[21] p-0 border-none
+      h-16 md:h-20
+      bg-[#eeeeeedd] backdrop-blur-sm"
     >
       <div
         className="flex justify-between items-center max-w-7xl
-        py-3 bg-[#eeeeeedd] h-full backdrop-blur-sm
-        w-11/12"
+        py-3 bg-transparent h-full 
+        w-11/12 sm:w-10/12 md:w-11/12 xl:w-10/12"
       >
         <Link href={"/schedules"} className="bg-transparent">
           <h1
             className="font-bold text-primary
-            text-3xl bg-transparent"
+            text-2xl sm:text-3xl bg-transparent"
           >
             ISKOduler
           </h1>
         </Link>
         <nav
-          className="flex 
-          text-3xl items-center
-          gap-3 lg:gap-4"
+          className="flex bg-transparent
+          text-3xl items-center flex-shrink-0
+          gap-2 sm:gap-3 lg:gap-4"
         >
           <Link
             href={"/schedules"}
             className={`${
               isSchedulesVisible ? "" : "hidden"
-            } ${hoverIconInfoClass} hover:after:content-["Schedules"]`}
+            } ${hoverIconInfoClass} hover:after:content-["Schedules"] bg-transparent`}
           >
-            <HiQueueList className="text-2xl md:text-3xl" />
+            <BiSolidCalendarWeek className="text-3xl md:text-4xl bg-transparent " />
           </Link>
           <Link
             href={"/schedules/previous"}
+            shallow={true}
             className={`${
               isPreviousVisible ? "" : "hidden"
-            } ${hoverIconInfoClass} hover:after:content-["Previous_tasks"]`}
+            } ${hoverIconInfoClass} hover:after:content-["Previous_tasks"] bg-transparent`}
           >
-            <PiCalendarCheckFill className="text-3xl md:text-4xl" />
+            <PiCalendarCheckFill className="text-3xl md:text-4xl bg-transparent " />
           </Link>
           <Link
             href={"/profile"}
-            className={`${
+            className={`group ${
               isProfileVisible ? "" : "hidden"
-            } ${hoverIconInfoClass} hover:after:content-["Profile"]`}
+            } ${hoverIconInfoClass} hover:after:content-["Profile"] bg-transparent`}
           >
-            <IoPersonCircleSharp className="text-3xl md:text-4xl" />
+            {userInformation?.imageURL && (
+              <Image
+                src={userInformation.imageURL}
+                height={50}
+                width={50}
+                alt="Profile Image"
+                className="rounded-full object-cover bg-white bg-transparent 
+                w-9 md:w-11 h-9 md:h-11 
+                border-2 border-zinc-300"
+              ></Image>
+            )}
+            {!userInformation?.imageURL && (
+              <IoPersonCircleSharp className="text-3xl md:text-4xl bg-transparent" />
+            )}
           </Link>
         </nav>
       </div>

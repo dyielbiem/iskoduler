@@ -11,13 +11,16 @@ const Index = () => {
       grid-cols-1 
       md:grid-cols-2
       md:h-screen
-      w-full
+      w-full md:w-11/12 xl:w-10/12
+      gap-x-4 
       max-w-7xl"
     >
       <WelcomeJumbotron />
       <main
         className="flex flex-col
-        w-11/12 max-w-lg
+        w-11/12 sm:w-9/12 md:w-11/12 xl:w-10/12
+        max-w-md lg:max-w-lg
+        md:justify-self-end
         items-center
         h-[calc(100vh-4rem)] md:h-fit
         md:justify-center

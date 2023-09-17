@@ -7,11 +7,12 @@ body {
 }
 
 #__next {
-  @apply w-full flex items-center flex-col;
+  @apply w-full flex items-center flex-col min-h-screen;
 }
 
 * {
   @apply font-body text-black bg-white box-border m-0 p-0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 h1 {

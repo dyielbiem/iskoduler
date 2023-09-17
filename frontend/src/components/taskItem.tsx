@@ -15,9 +15,10 @@ interface taskType {
 
 interface Props {
   task: taskType;
+  isEditHidden: boolean;
 }
 
-const TaskItem = ({ task }: Props) => {
+const TaskItem = ({ task, isEditHidden }: Props) => {
   const [isOptionVisible, setIsOptionVisible] = useState<boolean>(false);
   const [isTaskFormVisible, setIsTaskFormVisible] = useState<boolean>(false);
   const [isDeleteTaskModalVisible, setIsDeleteTaskModalVisible] =
@@ -67,7 +68,7 @@ const TaskItem = ({ task }: Props) => {
     >
       <div className="flex justify-between items-center bg-tertiary">
         <div className="flex flex-col">
-          <p className="leading-none">{task.subject}</p>
+          <p>{task.subject}</p>
           <h3
             className="font-bold bg-tertiary leading-none
             text-lg md:text-xl"

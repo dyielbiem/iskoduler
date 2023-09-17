@@ -1,8 +1,9 @@
 import { IoArrowBack } from "react-icons/io5";
 import CustomSelect from "./CustomSelect";
 import { useState, useRef, SetStateAction, useEffect } from "react";
-import { postClass, updateClass } from "@/utils/requests";
+import { postClass, updateClass } from "@/utils/schedulesRequests";
 import useScheduleContext from "@/customHooks/useScheduleContext";
+import { useRouter } from "next/router";
 
 interface Props {
   isVisible: boolean;
@@ -25,6 +26,7 @@ const ClassForm = ({
   timeEndPlaceholder,
   action,
 }: Props) => {
+  const { dispatch } = useScheduleContext();
   const [className, setClassName] = useState<string>(classNamePlaceholder);
   const [description, setDescription] = useState<string>(
     descriptionPlaceholder
@@ -47,8 +49,16 @@ const ClassForm = ({
     "Sunday",
   ];
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
-  const { dispatch } = useScheduleContext();
+  useEffect(() => {
+    if (router.query.form !== "class") {
+      clearForm();
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [router.query.form]);
 
   const timeFormatter = (time: string): Date => {
     return new Date(`01/01/1970 ${time}`);
@@ -58,7 +68,7 @@ const ClassForm = ({
     ref.current?.focus();
   };
 
-  const closeForm = () => {
+  const clearForm = () => {
     if (action.type === "ADD") {
       setClassName("");
       setDescription("");
@@ -66,8 +76,13 @@ const ClassForm = ({
       setTimeStart("");
       setTimeEnd("");
     }
+  };
+
+  const closeForm = () => {
+    clearForm();
     setIsVisible((prevState) => !prevState);
     setError("");
+    router.push("/schedules", undefined, { shallow: true });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -127,7 +142,7 @@ const ClassForm = ({
     <div
       className={`bg-transparent text-black
       fixed top-0 left-0
-      ${isVisible ? "flex" : "hidden"}
+      ${isVisible || router.query.form === "class" ? "flex" : "hidden"}
       justify-center items-center
       w-screen
       h-screen z-50`}
@@ -183,11 +198,17 @@ const ClassForm = ({
         />
         <div
           className="flex bg-white w-full rounded-md
-          justify-between shadow-md border-[1px] 
+          justify-between shadow-md border-[1px] gap-3
           py-3
           px-2"
           onClick={() => setTimeInputFocus(timeStartRef)}
         >
+          <label
+            htmlFor="timeStart"
+            className="text-gray-400 text-right text-base"
+          >
+            * Time start
+          </label>
           <input
             value={timeStart}
             onChange={(event) => setTimeStart(event.target.value)}
@@ -196,20 +217,20 @@ const ClassForm = ({
             ref={timeStartRef}
             className="!p-0 !shadow-none !border-0 !w-fit"
           />
-          <label
-            htmlFor="timeStart"
-            className="text-gray-400 text-right text-base"
-          >
-            * Time start
-          </label>
         </div>
         <div
           className="flex bg-white w-full rounded-md
-          justify-between shadow-md border-[1px] 
+          justify-between shadow-md border-[1px] gap-3
           py-3
           px-2"
           onClick={() => setTimeInputFocus(timeEndRef)}
         >
+          <label
+            htmlFor="timeEnd"
+            className="text-gray-400 text-left text-base flex-1"
+          >
+            * Time end
+          </label>
           <input
             value={timeEnd}
             onChange={(event) => setTimeEnd(event.target.value)}
@@ -219,12 +240,6 @@ const ClassForm = ({
             ref={timeEndRef}
             className="!p-0 !shadow-none !border-0 !w-fit"
           />
-          <label
-            htmlFor="timeEnd"
-            className="text-gray-400 text-right text-base"
-          >
-            * Time end
-          </label>
         </div>
         {error && (
           <p

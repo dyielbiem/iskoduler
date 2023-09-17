@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import TaskItem from "./TaskItem";
+import useTaskOperationContext from "@/customHooks/useTaskOperationContext";
 
 interface taskType {
   _id: string;
@@ -12,9 +14,22 @@ interface taskType {
 interface Props {
   header: string;
   tasks: taskType[];
+  type?: "previous" | "upcoming";
 }
 
-const TaskGroup = ({ tasks, header }: Props) => {
+const TaskGroup = ({ tasks, header, type = "upcoming" }: Props) => {
+  const { setIsDeleteVisible, setIsEditVisible } = useTaskOperationContext();
+
+  useEffect(() => {
+    if (type === "upcoming") {
+      setIsDeleteVisible(true);
+      setIsEditVisible(true);
+    } else if (type === "previous") {
+      setIsDeleteVisible(true);
+      setIsEditVisible(false);
+    }
+  }, []);
+
   return (
     <div className="flex flex-col gap-4 w-full">
       <h2
@@ -32,7 +47,11 @@ const TaskGroup = ({ tasks, header }: Props) => {
         gap-x-6 lg:gap-x-8`}
       >
         {tasks.map((task, index) => (
-          <TaskItem task={task} key={index} />
+          <TaskItem
+            task={task}
+            key={index}
+            isEditHidden={type === "upcoming" ? false : true}
+          />
         ))}
       </ul>
     </div>

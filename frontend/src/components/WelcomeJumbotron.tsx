@@ -1,23 +1,25 @@
 const WelcomeJumbotron = () => {
   return (
     <div
-      className="z-50 w-full py-3 flex flex-col
-      h-full justify-center md:w-11/12
+      className="z-50 py-3 flex flex-col
+      h-full justify-center 
+      w-11/12 md:w-full
       px-2"
     >
       <h1
         className="font-bold text-primary 
         text-center md:text-left
-        text-3xl md:text-4xl lg:text-5xl"
+        text-2xl sm:text-3xl md:text-5xl lg:text-6xl
+        tracking-tight"
       >
         ISKOduler
       </h1>
       <p
-        className="hidden md:block font-medium
-          text-lg md:text-xl lg:text-2xl"
+        className="hidden md:block font-medium mt-1.5
+        max-w-[30ch] md:leading-tight lg:leading-snug
+        text-lg md:text-xl lg:text-2xl"
       >
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit ad harum
-        cum impedit dolores
+        Manage your class schedules even while you are in the middle of traffic.
       </p>
     </div>
   );

@@ -1,4 +1,4 @@
-import { FaPeopleRoof } from "react-icons/fa6";
+import { BsJournalBookmarkFill } from "react-icons/bs";
 import { GoTasklist } from "react-icons/go";
 
 type viewType = "class" | "task";
@@ -11,60 +11,43 @@ const TabSwitcher = ({ viewOption, setViewOption }: Props) => {
   return (
     <ul
       className="rounded-full flex flex-nowrap border-tertiary bg-none
-        shadow-customShadow border-[3px]  justify-center font-semibold items-center overflow-hidden w-fit
+        shadow-customShadow border-[3px] justify-center font-semibold items-center overflow-hidden w-fit flex-shrink
         gap-1
-        text-lg md:text-xl"
+        text-base sm:text-lg"
     >
       <li
         onClick={() => setViewOption("task")}
-        className="bg-tertiary group flex-shrink-0"
+        className={`group flex-shrink-0 flex h-full 
+        px-4 sm:px-6 py-1.5 rounded-full gap-2 items-center cursor-pointer
+        font-bold
+        ${
+          viewOption === "task"
+            ? "bg-primary text-white fill-white"
+            : "bg-white hover:bg-zinc-200"
+        }`}
       >
-        <button
-          className={`rounded-full flex
-            items-center justify-center
-            ${
-              viewOption === "task"
-                ? "text-tertiary bg-primary"
-                : "text-black bg-tertiary group-hover:bg-gray-300"
-            }
-            gap-2
-            px-4 md:px-5
-            py-1 md:py-1.5`}
-        >
-          <GoTasklist
-            className={`text-rounded-full md:text-xl
-              ${
-                viewOption === "task"
-                  ? "fill-tertiary bg-primary"
-                  : "fill-black bg-tertiary group-hover:bg-gray-300"
-              }`}
-          />
-          Tasks
-        </button>
+        <GoTasklist
+          className="text-rounded-full 
+          text-xl md:text-2xl bg-inherit fill-inherit"
+        />
+        <p className="bg-inherit text-inherit">Tasks</p>
       </li>
-      <li onClick={() => setViewOption("class")} className="bg-tertiary group">
-        <button
-          className={`rounded-full flex
-            items-center justify-center
-            ${
-              viewOption === "class"
-                ? "text-tertiary bg-primary"
-                : "text-black bg-tertiary group-hover:bg-gray-300"
-            }
-            gap-2
-            px-4 md:px-5
-            py-1 md:py-1.5`}
-        >
-          <FaPeopleRoof
-            className={`text-rounded-full md:text-xl
-              ${
-                viewOption === "class"
-                  ? "fill-tertiary bg-primary"
-                  : "fill-black bg-tertiary group-hover:bg-gray-300"
-              }`}
-          />
-          Classes
-        </button>
+
+      <li
+        onClick={() => setViewOption("class")}
+        className={`group flex-shrink-0 flex h-full
+        px-4 sm:px-6 py-1.5 rounded-full gap-2 items-center cursor-pointer
+        ${
+          viewOption === "class"
+            ? "bg-primary text-white fill-white"
+            : "bg-white hover:bg-zinc-200"
+        }`}
+      >
+        <BsJournalBookmarkFill
+          className="text-rounded-full 
+          text-lg md:text-xl bg-inherit fill-inherit"
+        />
+        <p className="bg-inherit text-inherit">Classes</p>
       </li>
     </ul>
   );

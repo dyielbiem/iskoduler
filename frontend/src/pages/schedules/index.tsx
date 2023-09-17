@@ -2,20 +2,23 @@ import Header from "@/components/Header";
 import TabSwitcher from "@/components/TabSwitcher";
 import Schedules from "@/components/Schedules";
 import { useEffect, useState } from "react";
-import { getSchedules } from "@/utils/requests";
+import { getSchedules } from "@/utils/schedulesRequests";
 import TaskForm from "@/components/TaskForm";
 import ClassForm from "@/components/ClassForm";
 import useScheduleContext from "@/customHooks/useScheduleContext";
 import protectRoute from "@/utils/protectRoute";
-import AddSchedule from "@/components/AddSchedule";
+import AddScheduleButton from "@/components/AddScheduleButton";
+import AddScheduleModal from "@/components/AddScheduleModal";
 
 type viewType = "class" | "task";
 
 const SchedulesPage = () => {
-  const { dispatch } = useScheduleContext();
+  const { state, dispatch } = useScheduleContext();
   const [viewOption, setViewOption] = useState<viewType>("task");
   const [isTaskFormVisible, setIsTaskFormVisible] = useState<boolean>(false);
   const [isClassFormVisible, setIsClassFormVisible] = useState<boolean>(false);
+  const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false);
+  const [isAddButtonVisible, setIsAddButtonVisible] = useState<boolean>(true);
 
   // Fetch all tasks and classes through GET Request
   const fetchSchedules = async () => {
@@ -27,7 +30,8 @@ const SchedulesPage = () => {
   };
 
   useEffect(() => {
-    fetchSchedules();
+    if (state.tasks === undefined && state.classes === undefined)
+      fetchSchedules();
   }, []);
 
   return (
@@ -37,23 +41,32 @@ const SchedulesPage = () => {
       w-full"
     >
       <Header isPreviousVisible={true} isProfileVisible={true} />
-      <main
-        className="flex flex-col items-center
-        w-11/12"
+      <div
+        className="w-full flex items-center justify-center 
+        py-4 md:py-2
+        bg-[#eeeeeedd] backdrop-blur-sm sticky h-fit
+        top-16 md:top-20 z-20"
       >
         <div
-          className="flex w-full max-w-7xl items-center
+          className="flex max-w-7xl items-center
           justify-center md:justify-between
-          bg-[#eeeeeeee]"
+          w-11/12 xl:w-10/12 bg-transparent"
         >
           <TabSwitcher viewOption={viewOption} setViewOption={setViewOption} />
-          <AddSchedule
+          <AddScheduleButton
             isTaskFormVisible={isTaskFormVisible}
             isClassFormVisible={isClassFormVisible}
-            setIsTaskFormVisible={setIsTaskFormVisible}
-            setIsClassFormVisible={setIsClassFormVisible}
+            isAddButtonVisible={isAddButtonVisible}
+            setIsAddButtonVisible={setIsAddButtonVisible}
+            setIsAddModalVisible={setIsAddModalVisible}
+            type="large"
           />
         </div>
+      </div>
+      <main
+        className="flex flex-col items-center 
+        w-11/12 sm:w-10/12 md:w-11/12 xl:w-10/12"
+      >
         <Schedules viewOption={viewOption} />
         <TaskForm
           isTaskFormVisible={isTaskFormVisible}
@@ -75,7 +88,22 @@ const SchedulesPage = () => {
           timeEndPlaceholder=""
           action={{ type: "ADD" }}
         />
+        <AddScheduleModal
+          isAddModalVisible={isAddModalVisible}
+          setIsAddButtonVisible={setIsAddButtonVisible}
+          setIsAddModalVisible={setIsAddModalVisible}
+          setIsClassFormVisible={setIsClassFormVisible}
+          setIsTaskFormVisible={setIsTaskFormVisible}
+        />
       </main>
+      <AddScheduleButton
+        isTaskFormVisible={isTaskFormVisible}
+        isClassFormVisible={isClassFormVisible}
+        isAddButtonVisible={isAddButtonVisible}
+        setIsAddButtonVisible={setIsAddButtonVisible}
+        setIsAddModalVisible={setIsAddModalVisible}
+        type="small"
+      />
     </div>
   );
 };

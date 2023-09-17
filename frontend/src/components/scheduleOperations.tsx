@@ -1,7 +1,8 @@
 import { BsThreeDots } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { GiFeather } from "react-icons/gi";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useContext } from "react";
+import useTaskOperationContext from "@/customHooks/useTaskOperationContext";
 
 interface Props {
   isOptionVisible: boolean;
@@ -17,6 +18,7 @@ const ScheduleOperations = ({
   setIsFormVisible,
 }: Props) => {
   const optionRef = useRef<HTMLDivElement>(null);
+  const { isEditVisible, isDeleteVisible } = useTaskOperationContext();
 
   // Hide the task actions if clicked outside task actions component
   useEffect(() => {
@@ -43,8 +45,8 @@ const ScheduleOperations = ({
     setIsOptionVisible((prevState) => !prevState);
   };
 
-  // Function that will be called when update is clicked
-  const handleUpdateClick = () => {
+  // Function that will be called when edit is clicked
+  const handleEditClick = () => {
     setIsFormVisible((prevState) => !prevState);
     setIsOptionVisible((prevState) => !prevState);
   };
@@ -52,37 +54,41 @@ const ScheduleOperations = ({
   return (
     <div className="relative bg-tertiary" ref={optionRef}>
       <BsThreeDots
-        className="fill-black rounded-full p-1.5 hover:bg-gray-300 hover:fill-gray-800
-        cursor-pointer text-3xl bg-tertiary"
+        className="fill-black rounded-full p-1.5 hover:bg-zinc-200 hover:fill-gray-800
+        cursor-pointer text-3xl md:text-4xl bg-tertiary"
         onClick={() => setIsOptionVisible((prevState) => !prevState)}
       />
       <ul
         className={`absolute top-0 right-0 z-20 rounded-lg
         ${isOptionVisible ? "flex" : "hidden"} 
         flex-col shadow-md border-[1px]
-        translate-y-8 
+        translate-y-8 md:translate-y-10 p-1
         w-56`}
       >
-        <li
-          onClick={handleUpdateClick}
-          className="flex w-full items-center 
-                       cursor-pointer
-                       rounded-lg  gap-3 py-3 px-4 
-                       group hover:bg-gray-400"
-        >
-          <GiFeather className="group-hover:bg-gray-400" />
-          <p className="group-hover:bg-gray-400">Edit</p>
-        </li>
-        <li
-          onClick={handleDeleteClick}
-          className="flex w-full items-center 
-                       cursor-pointer
-                       rounded-lg  gap-3 py-3 px-4 
-                       group hover:bg-gray-400"
-        >
-          <MdDelete className="group-hover:bg-gray-400" />
-          <p className="group-hover:bg-gray-400">Delete</p>
-        </li>
+        {isEditVisible && (
+          <li
+            onClick={handleEditClick}
+            className="flex w-full items-center 
+            cursor-pointer
+            rounded  gap-3 py-3 px-4 
+            group hover:bg-zinc-200"
+          >
+            <GiFeather className="group-hover:bg-zinc-200" />
+            <p className="group-hover:bg-zinc-200  font-medium">Edit</p>
+          </li>
+        )}
+        {isDeleteVisible && (
+          <li
+            onClick={handleDeleteClick}
+            className="flex w-full items-center 
+            cursor-pointer
+            rounded gap-3 py-3 px-4
+            group hover:bg-zinc-200"
+          >
+            <MdDelete className="group-hover:bg-zinc-200" />
+            <p className="group-hover:bg-zinc-200  font-medium">Delete</p>
+          </li>
+        )}
       </ul>
     </div>
   );

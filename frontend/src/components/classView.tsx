@@ -1,5 +1,6 @@
 import useScheduleContext from "@/customHooks/useScheduleContext";
 import ClassItem from "./ClassItem";
+import NoSchedule from "./NoSchedule";
 
 const ClassView = () => {
   const { state } = useScheduleContext();
@@ -23,6 +24,8 @@ const ClassView = () => {
     timeEnd: string;
   }
 
+  if (state.classes === undefined) return <></>;
+
   let dailyClassSchedules: classType[][] = [];
 
   // Group and arrange the classes according to their scheduled day
@@ -41,8 +44,11 @@ const ClassView = () => {
     }
   }
 
+  if (state.classes.length === 0 && state.classes !== undefined)
+    return <NoSchedule scheduleType="class" />;
+
   return (
-    <div className="flex flex-col w-full my-6 gap-6 max-w-7xl">
+    <div className="flex flex-col w-full mb-16 mt-4 md:mt-8 gap-6 max-w-7xl">
       {dailyClassSchedules.length > 0 &&
         dailyClassSchedules.map(
           (classSchedules, classIndex) =>
@@ -62,7 +68,7 @@ const ClassView = () => {
                 <ul
                   className={`w-full grid
                   grid-cols-1 md:grid-cols-2
-                  gap-y-6
+                  gap-y-6 lg:gap-y-8
                   gap-x-6 lg:gap-x-8`}
                 >
                   {classSchedules.map((classItem, index) => (

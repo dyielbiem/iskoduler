@@ -47,7 +47,6 @@ const SignInForm = () => {
       onSubmit={handleSubmit}
       className="flex flex-col 
       w-full
-      max-w-md
       gap-4"
     >
       <input
