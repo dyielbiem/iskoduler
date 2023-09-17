@@ -1,4 +1,4 @@
-import { IoClose } from "react-icons/io5";
+import { IoCloseCircle } from "react-icons/io5";
 import { MdUpload } from "react-icons/md";
 import { IoMdTrash } from "react-icons/io";
 import useUserContext from "@/customHooks/useUserContext";
@@ -67,7 +67,7 @@ const ManageProfileModal = ({
           py-2 px-2"
         >
           <h2 className="text-xl font-bold">Profile image</h2>
-          <IoClose className="text-3xl cursor-pointer" onClick={closeModal} />
+          <IoCloseCircle className="fill-black hover:fill-zinc-600 text-3xl cursor-pointer" />
         </div>
         <ul>
           <li
@@ -88,7 +88,7 @@ const ManageProfileModal = ({
               group-hover:bg-primary"
             />
             <span
-              className="text-base md:text-lg font-bold  group-hover:text-white 
+              className="text-lg font-bold  group-hover:text-white 
               group-hover:bg-primary"
             >
               Upload
@@ -107,7 +107,7 @@ const ManageProfileModal = ({
               group-hover:bg-primary"
               />
               <span
-                className="text-base md:text-lg font-bold group-hover:text-white 
+                className="text-lg font-bold group-hover:text-white 
               group-hover:bg-primary"
               >
                 Delete

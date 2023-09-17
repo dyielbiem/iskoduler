@@ -1,9 +1,8 @@
-import { IoArrowBack } from "react-icons/io5";
+import { IoArrowBack, IoCloseCircle } from "react-icons/io5";
 import CustomSelect from "./CustomSelect";
 import { useState, useRef, SetStateAction, useEffect } from "react";
 import { postClass, updateClass } from "@/utils/schedulesRequests";
 import useScheduleContext from "@/customHooks/useScheduleContext";
-import { useRouter } from "next/router";
 
 interface Props {
   isVisible: boolean;
@@ -49,16 +48,6 @@ const ClassForm = ({
     "Sunday",
   ];
   const [error, setError] = useState<string>("");
-  const router = useRouter();
-
-  useEffect(() => {
-    if (router.query.form !== "class") {
-      clearForm();
-      setIsVisible(false);
-    } else {
-      setIsVisible(true);
-    }
-  }, [router.query.form]);
 
   const timeFormatter = (time: string): Date => {
     return new Date(`01/01/1970 ${time}`);
@@ -68,7 +57,21 @@ const ClassForm = ({
     ref.current?.focus();
   };
 
-  const clearForm = () => {
+  const promptMessage = (event: BeforeUnloadEvent) => {
+    event.preventDefault();
+    event.returnValue = true;
+  };
+
+  useEffect(() => {
+    if (isVisible) {
+      window.addEventListener("beforeunload", promptMessage);
+      return () => {
+        window.removeEventListener("beforeunload", promptMessage);
+      };
+    }
+  }, [isVisible]);
+
+  const closeForm = () => {
     if (action.type === "ADD") {
       setClassName("");
       setDescription("");
@@ -76,13 +79,8 @@ const ClassForm = ({
       setTimeStart("");
       setTimeEnd("");
     }
-  };
-
-  const closeForm = () => {
-    clearForm();
     setIsVisible((prevState) => !prevState);
     setError("");
-    router.push("/schedules", undefined, { shallow: true });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -142,7 +140,7 @@ const ClassForm = ({
     <div
       className={`bg-transparent text-black
       fixed top-0 left-0
-      ${isVisible || router.query.form === "class" ? "flex" : "hidden"}
+      ${isVisible ? "flex" : "hidden"}
       justify-center items-center
       w-screen
       h-screen z-50`}
@@ -166,13 +164,13 @@ const ClassForm = ({
         z-50"
         onSubmit={handleSubmit}
       >
-        <div className="flex text-2xl gap-3 text-white">
-          <button type="button" onClick={closeForm}>
-            <IoArrowBack />
-          </button>
+        <div className="flex text-2xl gap-3 text-white items-center justify-between">
           <h2 className="font-bold">
             {action.type === "ADD" ? "Add new" : "Edit"} class
           </h2>
+          <button type="button" onClick={closeForm}>
+            <IoCloseCircle className="fill-black hover:fill-zinc-600 text-3xl cursor-pointer" />
+          </button>
         </div>
         <input
           type="text"

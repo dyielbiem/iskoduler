@@ -46,8 +46,9 @@ const DeleteModal = ({
         className="bg-white rounded-xl
         flex flex-col justify-center items-center
         gap-2                 
-        w-11/12 max-w-sm
-        px-5
+        w-10/12 
+        max-w-sm
+        px-5 sm:px-8
         py-8"
       >
         <h2
@@ -62,22 +63,25 @@ const DeleteModal = ({
         >
           {`Are you sure to delete this ${type}? This action cannot be undone.`}
         </p>
-        <div>
+        <div
+          className="flex flex-col sm:flex-row items-center 
+          justify-center gap-2 w-full"
+        >
           <button
             className="bg-primary rounded-full
-                        font-bold text-white
-                        py-2 
-                        px-5
-                        text-lg"
+            font-bold text-white flex-1 w-full
+            py-2 
+            px-5
+            text-lg"
             onClick={handleConfirmClick}
           >
             Confirm
           </button>
           <button
             className="rounded-full font-bold
-                       py-2 
-                       px-5
-                       text-lg"
+            py-2 bg-zinc-300 flex-1 w-full
+            px-5
+            text-lg"
             onClick={() => setIsThisVisible((prevState) => !prevState)}
           >
             Cancel

@@ -62,7 +62,7 @@ const Header = ({
         </Link>
         <nav
           className="flex bg-transparent
-          text-3xl items-center flex-shrink-0
+          items-center flex-shrink-0
           gap-2 sm:gap-3 lg:gap-4"
         >
           <Link
@@ -71,7 +71,7 @@ const Header = ({
               isSchedulesVisible ? "" : "hidden"
             } ${hoverIconInfoClass} hover:after:content-["Schedules"] bg-transparent`}
           >
-            <BiSolidCalendarWeek className="text-3xl md:text-4xl bg-transparent " />
+            <BiSolidCalendarWeek className="text-4xl bg-transparent " />
           </Link>
           <Link
             href={"/schedules/previous"}
@@ -80,7 +80,7 @@ const Header = ({
               isPreviousVisible ? "" : "hidden"
             } ${hoverIconInfoClass} hover:after:content-["Previous_tasks"] bg-transparent`}
           >
-            <PiCalendarCheckFill className="text-3xl md:text-4xl bg-transparent " />
+            <PiCalendarCheckFill className="text-4xl bg-transparent " />
           </Link>
           <Link
             href={"/profile"}
@@ -95,12 +95,12 @@ const Header = ({
                 width={50}
                 alt="Profile Image"
                 className="rounded-full object-cover bg-white bg-transparent 
-                w-9 md:w-11 h-9 md:h-11 
+                w-10 md:w-11 h-10 md:h-11 
                 border-2 border-zinc-300"
               ></Image>
             )}
             {!userInformation?.imageURL && (
-              <IoPersonCircleSharp className="text-3xl md:text-4xl bg-transparent" />
+              <IoPersonCircleSharp className="text-4xl bg-transparent" />
             )}
           </Link>
         </nav>

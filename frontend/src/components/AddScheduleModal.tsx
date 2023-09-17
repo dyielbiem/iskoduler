@@ -1,7 +1,6 @@
-import { useRouter } from "next/router";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { GoTasklist } from "react-icons/go";
-import { IoClose } from "react-icons/io5";
+import { IoCloseCircle } from "react-icons/io5";
 
 interface Props {
   isAddModalVisible: boolean;
@@ -18,7 +17,6 @@ const AddScheduleModal = ({
   isAddModalVisible,
   setIsClassFormVisible,
 }: Props) => {
-  const router = useRouter();
   // Show the add schedule button then hide add schedule modal
   const showButton = () => {
     setIsAddButtonVisible(true);
@@ -29,15 +27,12 @@ const AddScheduleModal = ({
   const handleTaskClick = () => {
     setIsAddModalVisible(false);
     setIsTaskFormVisible((prevState) => !prevState);
-    router.query.form = "task";
-    router.push(router, undefined, { shallow: true });
   };
 
   // Show the class form then hide add schedule modal
   const handleClassClick = () => {
     setIsAddModalVisible(false);
-    router.query.form = "class";
-    router.push(router, undefined, { shallow: true });
+    setIsClassFormVisible(true);
   };
 
   return (
@@ -70,8 +65,8 @@ const AddScheduleModal = ({
           >
             Add
           </h2>
-          <button onClick={showButton} className="text-3xl">
-            <IoClose />
+          <button onClick={showButton} className="text-3xl rounded-full">
+            <IoCloseCircle className="fill-black hover:fill-zinc-600 " />
           </button>
         </div>
         <ul
@@ -83,7 +78,7 @@ const AddScheduleModal = ({
             group cursor-pointer font-bold
             rounded
             hover:bg-primary hover:text-white
-            text-base md:text-lg
+            text-lg
             gap-4
             px-3
             py-2"
@@ -97,7 +92,7 @@ const AddScheduleModal = ({
             hover:bg-primary hover:text-white
             cursor-pointer font-bold
             rounded
-            text-base md:text-lg
+            text-lg
             group
             gap-4
             px-3

@@ -108,4 +108,4 @@ const SchedulesPage = () => {
   );
 };
 
-export default protectRoute(SchedulesPage);
+export default SchedulesPage;

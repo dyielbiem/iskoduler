@@ -1,11 +1,10 @@
 import { useState, SetStateAction, useEffect } from "react";
 import CustomSelect from "./CustomSelect";
 import DateTimePicker from "./DateTimePicker";
-import { IoArrowBack } from "react-icons/io5";
+import { IoArrowBack, IoCloseCircle } from "react-icons/io5";
 import { postTask, updateTask } from "@/utils/schedulesRequests";
 import { DateTime } from "luxon";
 import useScheduleContext from "@/customHooks/useScheduleContext";
-import { useRouter } from "next/router";
 
 interface Props {
   isTaskFormVisible: boolean;
@@ -45,18 +44,22 @@ const TaskForm = ({
   );
   const currentDay: string = String(new Date().getDate()).padStart(2, "0");
   const stringDate: string = `${currentYear}-${currentMonth}-${currentDay}`;
-  const router = useRouter();
+
+  const promptMessage = (event: BeforeUnloadEvent) => {
+    event.preventDefault();
+    event.returnValue = true;
+  };
 
   useEffect(() => {
-    if (router.query.form !== "task") {
-      setIsTaskFormVisible(false);
-      clearForm();
-    } else {
-      setIsTaskFormVisible(true);
+    if (isTaskFormVisible) {
+      window.addEventListener("beforeunload", promptMessage);
+      return () => {
+        window.removeEventListener("beforeunload", promptMessage);
+      };
     }
-  }, [router.query.form]);
+  }, [isTaskFormVisible]);
 
-  const clearForm = () => {
+  const closeForm = () => {
     // Clear all the fields in the task form
     if (action.type === "ADD") {
       setTaskName("");
@@ -65,14 +68,9 @@ const TaskForm = ({
       setDeadline("* Deadline");
       setType("* Type");
     }
-  };
-
-  const closeForm = () => {
-    clearForm();
     // Hide the task form
     setIsTaskFormVisible((prevState) => !prevState);
     setError("");
-    router.push("/schedules", undefined, { shallow: true });
   };
 
   // Function that will be called when submit is clicked
@@ -139,11 +137,7 @@ const TaskForm = ({
     <div
       className={`fixed top-0 left-0 bg-transparent
       justify-center items-center z-50 text-black
-      ${
-        isTaskFormVisible || router.query.form === "task"
-          ? "flex flex-col"
-          : "hidden"
-      } 
+      ${isTaskFormVisible ? "flex flex-col" : "hidden"} 
       h-screen 
       w-screen`}
     >
@@ -167,19 +161,19 @@ const TaskForm = ({
         onSubmit={handleSubmit}
       >
         <div
-          className="flex items-center 
+          className="flex items-center justify-between
                      gap-3"
         >
+          <h2 className="text-black font-bold text-2xl">
+            {action.type === "ADD" ? "Add new" : "Edit"} task
+          </h2>
           <button
             type="button"
             onClick={closeForm}
             className="text-2xl text-white"
           >
-            <IoArrowBack />
+            <IoCloseCircle className="fill-black hover:fill-zinc-600 text-3xl cursor-pointer" />
           </button>
-          <h2 className="text-black font-bold text-2xl">
-            {action.type === "ADD" ? "Add new" : "Edit"} task
-          </h2>
         </div>
         <input
           type="text"
