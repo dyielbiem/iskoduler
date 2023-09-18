@@ -36,7 +36,7 @@ const ClassItem = ({ classItem }: Props) => {
   return (
     <li
       key={classItem._id}
-      className="text-white bg-white rounded-lg
+      className="text-white bg-tertiary rounded-lg
       flex flex-col relative before:rounded-l-md
       shadow-lg border-2 border-zinc-200
       before:content-[''] before:absolute before:h-full
@@ -47,7 +47,7 @@ const ClassItem = ({ classItem }: Props) => {
       pr-4 md:pr-6 
       py-5"
     >
-      <div className="flex justify-between w-full">
+      <div className="flex justify-between w-full bg-tertiary">
         <h3
           className="font-bold
           text-lg lg:text-xl"
@@ -61,11 +61,11 @@ const ClassItem = ({ classItem }: Props) => {
           setIsFormVisible={setIsClassFormVisible}
         />
       </div>
-      <p>{classItem.description}</p>
+      <p className="bg-tertiary">{classItem.description}</p>
       <p
         className="border-2 w-fit self-end
         rounded-full text-class border-class font-bold
-        text-sm sm:text-base 
+        text-sm sm:text-base bg-tertiary
         mt-8
         py-2
         px-4 md:px-6"

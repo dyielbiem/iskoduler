@@ -22,8 +22,8 @@ const TabSwitcher = ({ viewOption, setViewOption }: Props) => {
         font-bold
         ${
           viewOption === "task"
-            ? "bg-primary text-white fill-white"
-            : "bg-white hover:bg-zinc-200"
+            ? "bg-primary text-tertiary fill-tertiary"
+            : "bg-tertiary hover:bg-zinc-200"
         }`}
       >
         <GoTasklist
@@ -39,8 +39,8 @@ const TabSwitcher = ({ viewOption, setViewOption }: Props) => {
         px-4 sm:px-6 py-1.5 rounded-full gap-2 items-center cursor-pointer
         ${
           viewOption === "class"
-            ? "bg-primary text-white fill-white"
-            : "bg-white hover:bg-zinc-200"
+            ? "bg-primary text-tertiary fill-tertiary"
+            : "bg-tertiary hover:bg-zinc-200"
         }`}
       >
         <BsJournalBookmarkFill

@@ -68,7 +68,7 @@ const TaskItem = ({ task, isEditHidden }: Props) => {
     >
       <div className="flex justify-between items-center bg-tertiary">
         <div className="flex flex-col">
-          <p>{task.subject}</p>
+          <p className="bg-tertiary">{task.subject}</p>
           <h3
             className="font-bold bg-tertiary leading-none
             text-lg md:text-xl"
@@ -97,10 +97,10 @@ const TaskItem = ({ task, isEditHidden }: Props) => {
       >
         {task.description}
       </p>
-      <div className="w-full flex-1 flex flex-col items-end justify-end">
+      <div className="w-full flex-1 flex flex-col items-end justify-end bg-tertiary">
         <p
           className={`border-2 rounded-full font-bold
-          w-fit self-end bg-tertiary mt-2
+          w-fit self-end bg-tertiary mt-2 
           ${
             task.type === "Activity"
               ? "border-activity text-activity"

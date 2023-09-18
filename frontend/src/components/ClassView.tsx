@@ -48,7 +48,10 @@ const ClassView = () => {
     return <NoSchedule scheduleType="class" />;
 
   return (
-    <div className="flex flex-col w-full mb-16 mt-4 md:mt-8 gap-6 max-w-7xl">
+    <div
+      className="flex flex-col w-full mb-16 mt-4 
+      md:mt-8 gap-10 max-w-7xl"
+    >
       {dailyClassSchedules.length > 0 &&
         dailyClassSchedules.map(
           (classSchedules, classIndex) =>
