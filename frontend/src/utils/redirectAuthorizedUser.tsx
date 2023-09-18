@@ -23,4 +23,6 @@ const RedirectAuthorizedUser = (WrappedComponent: () => JSX.Element) => {
   };
 };
 
+RedirectAuthorizedUser.displayName = "RedirectAuthorizedUser";
+
 export default RedirectAuthorizedUser;

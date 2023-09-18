@@ -24,4 +24,6 @@ const ProtectRoute = (WrappedComponent: () => JSX.Element) => {
   };
 };
 
+ProtectRoute.displayName = "ProtectRoute";
+
 export default ProtectRoute;
