@@ -74,7 +74,7 @@ const Header = ({
             <BiSolidCalendarWeek className="text-4xl bg-transparent " />
           </Link>
           <Link
-            href={"/schedules/previous"}
+            href={"/schedules/previous-tasks"}
             shallow={true}
             className={`${
               isPreviousVisible ? "" : "hidden"
