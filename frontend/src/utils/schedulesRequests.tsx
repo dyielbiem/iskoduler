@@ -1,12 +1,13 @@
-const backend: string = "http://localhost:5000";
-
 // Fetch all the schedules through GET request with authentication
 export const getSchedules = async () => {
   try {
-    const response = await fetch(`${backend}/api/schedules`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
 
@@ -25,20 +26,23 @@ export const postTask = async (
   description: string
 ) => {
   try {
-    const response = await fetch(`${backend}/api/schedules/tasks`, {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify({
-        taskName,
-        description,
-        deadline,
-        type,
-        subject,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/tasks`,
+      {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          taskName,
+          description,
+          deadline,
+          type,
+          subject,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
@@ -60,14 +64,17 @@ interface taskType {
 // Update Task through PATCH Request
 export const updateTask = async (taskID: string, task: taskType) => {
   try {
-    const response = await fetch(`${backend}/api/schedules/tasks/${taskID}`, {
-      method: "PATCH",
-      body: JSON.stringify(task),
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/tasks/${taskID}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(task),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
 
@@ -80,13 +87,16 @@ export const updateTask = async (taskID: string, task: taskType) => {
 // Delete Task through DELETE Request
 export const deleteTask = async (taskID: string) => {
   try {
-    const response = await fetch(`${backend}/api/schedules/tasks/${taskID}`, {
-      method: "DELETE",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/tasks/${taskID}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
@@ -106,21 +116,24 @@ export const postClass = async (
   timeEnd: string
 ) => {
   try {
-    const response = await fetch(`${backend}/api/schedules/classes`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/classes`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-      body: JSON.stringify({
-        className,
-        description,
-        daySchedule,
-        timeStart,
-        timeEnd,
-      }),
-    });
+        body: JSON.stringify({
+          className,
+          description,
+          daySchedule,
+          timeStart,
+          timeEnd,
+        }),
+      }
+    );
 
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
@@ -143,7 +156,7 @@ interface classType {
 export const updateClass = async (classID: string, classItem: classType) => {
   try {
     const response = await fetch(
-      `${backend}/api/schedules/classes/${classID}`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/classes/${classID}`,
       {
         method: "PATCH",
         body: JSON.stringify(classItem),
@@ -166,7 +179,7 @@ export const updateClass = async (classID: string, classItem: classType) => {
 export const deleteClass = async (classID: string) => {
   try {
     const response = await fetch(
-      `${backend}/api/schedules/classes/${classID}`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/classes/${classID}`,
       {
         method: "DELETE",
         credentials: "include",

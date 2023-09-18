@@ -11,19 +11,20 @@ interface userType {
   retypePassword: string;
 }
 
-const backend: string = "http://localhost:5000";
-
 // Sign Up User through POST Request
 export const postSignUp = async (user: userType) => {
   try {
-    const response = await fetch(`${backend}/api/users/signup`, {
-      method: "POST",
-      body: JSON.stringify(user),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/signup`,
+      {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
 
     const responseJSON: any = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
@@ -37,17 +38,21 @@ export const postSignUp = async (user: userType) => {
 // Sign In User through POST Request
 export const postSignIn = async (username: string, password: string) => {
   try {
-    const signInUser = await fetch(`${backend}/api/users/signin`, {
-      method: "POST",
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    console.log(process.env.NEXT_PUBLIC_BACKEND);
+    const signInUser = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/signin`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
     const response: any = await signInUser.json();
 
     if (!signInUser.ok) throw Error(response.Error);
@@ -61,14 +66,17 @@ export const postSignIn = async (username: string, password: string) => {
 // PATCH request to update the user's name
 export const patchUserName = async (name: nameType) => {
   try {
-    const respond = await fetch(`${backend}/api/users/information/name`, {
-      method: "PATCH",
-      body: JSON.stringify(name),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    const respond = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/name`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(name),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
 
     const respondJSON = respond.json();
     return respondJSON;
@@ -85,7 +93,7 @@ interface passwordType {
 export const patchUserPassword = async (password: passwordType) => {
   try {
     const newPassword = await fetch(
-      `${backend}/api/users/information/password`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/password`,
       {
         method: "PATCH",
         body: JSON.stringify(password),
@@ -106,10 +114,13 @@ export const patchUserPassword = async (password: passwordType) => {
 // Authenticate user through GET request
 export const getAuthenticate = async () => {
   try {
-    const response = await fetch(`${backend}/api/users/authenticate/`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/authenticate/`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
 
@@ -121,10 +132,13 @@ export const getAuthenticate = async () => {
 
 export const getUserInformation = async () => {
   try {
-    const response = await fetch(`${backend}/api/users/information/`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
 
@@ -137,10 +151,13 @@ export const getUserInformation = async () => {
 // Log Out User through GET Request
 export const getLogout = async () => {
   try {
-    const response = await fetch(`${backend}/api/users/logout/`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/logout/`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
 
@@ -153,11 +170,14 @@ export const getLogout = async () => {
 // Upload user's display image through PATCH request
 export const patchUserImage = async (formData: FormData) => {
   try {
-    const response = await fetch(`${backend}/api/users/information/image`, {
-      method: "PATCH",
-      credentials: "include",
-      body: formData,
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/image`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        body: formData,
+      }
+    );
 
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
@@ -171,10 +191,13 @@ export const patchUserImage = async (formData: FormData) => {
 // Delete user's display image through DELETE request
 export const deleteUserImage = async () => {
   try {
-    const response = await fetch(`${backend}/api/users/information/image`, {
-      method: "DELETE",
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/image`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
 
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
