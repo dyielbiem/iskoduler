@@ -1,7 +1,7 @@
 import WelcomeJumbotron from "../components/WelcomeJumbotron";
 import SignInForm from "@/components/SignInForm";
 import Link from "next/link";
-import RedirectAuthorizedUser from "@/utils/redirectAuthorizedUser";
+// import RedirectAuthorizedUser from "@/utils/redirectAuthorizedUser";
 
 const Index = () => {
   return (
@@ -62,4 +62,4 @@ const Index = () => {
   );
 };
 
-export default RedirectAuthorizedUser(Index);
+export default Index;

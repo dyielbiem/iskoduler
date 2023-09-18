@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import ManageProfile from "@/components/ManageProfile";
 import ProfileJumbotron from "@/components/ProfileJumbotron";
-import ProtectRoute from "@/utils/protectRoute";
+// import ProtectRoute from "@/utils/protectRoute";
 
 const Manage = () => {
   return (
@@ -22,4 +22,4 @@ const Manage = () => {
   );
 };
 
-export default ProtectRoute(Manage);
+export default Manage;

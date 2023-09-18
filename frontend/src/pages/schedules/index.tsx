@@ -6,7 +6,7 @@ import { getSchedules } from "@/utils/schedulesRequests";
 import TaskForm from "@/components/TaskForm";
 import ClassForm from "@/components/ClassForm";
 import useScheduleContext from "@/customHooks/useScheduleContext";
-import ProtectRoute from "@/utils/protectRoute";
+// import ProtectRoute from "@/utils/protectRoute";
 import AddScheduleButton from "@/components/AddScheduleButton";
 import AddScheduleModal from "@/components/AddScheduleModal";
 
@@ -108,4 +108,4 @@ const SchedulesPage = () => {
   );
 };
 
-export default ProtectRoute(SchedulesPage);
+export default SchedulesPage;
