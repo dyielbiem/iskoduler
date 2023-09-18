@@ -1,9 +1,13 @@
 import SignUpForm from "@/components/SignUpForm";
 import WelcomeJumbotron from "@/components/WelcomeJumbotron";
+import useAuthenticate from "@/customHooks/useAuthenticate";
 import Link from "next/link";
-// import RedirectAuthorizedUser from "@/utils/redirectAuthorizedUser";
 
 const SignUp = () => {
+  const isAuthenticated = useAuthenticate(true, "/schedules");
+
+  if (isAuthenticated) return <></>;
+
   return (
     <div
       className="grid

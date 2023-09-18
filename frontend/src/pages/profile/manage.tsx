@@ -1,9 +1,13 @@
 import Header from "@/components/Header";
 import ManageProfile from "@/components/ManageProfile";
 import ProfileJumbotron from "@/components/ProfileJumbotron";
+import useAuthenticate from "@/customHooks/useAuthenticate";
 // import ProtectRoute from "@/utils/protectRoute";
 
 const Manage = () => {
+  const isAuthenticated = useAuthenticate(false, "/");
+  if (!isAuthenticated) return <></>;
+
   return (
     <div className="flex flex-col w-full justify-center items-center">
       <Header isSchedulesVisible={true} />

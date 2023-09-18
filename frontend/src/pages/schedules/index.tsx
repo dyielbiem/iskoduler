@@ -9,6 +9,7 @@ import useScheduleContext from "@/customHooks/useScheduleContext";
 // import ProtectRoute from "@/utils/protectRoute";
 import AddScheduleButton from "@/components/AddScheduleButton";
 import AddScheduleModal from "@/components/AddScheduleModal";
+import useAuthenticate from "@/customHooks/useAuthenticate";
 
 type viewType = "class" | "task";
 
@@ -20,6 +21,8 @@ const SchedulesPage = () => {
   const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false);
   const [isAddButtonVisible, setIsAddButtonVisible] = useState<boolean>(true);
 
+  const isAuthenticated = useAuthenticate(false, "/");
+
   // Fetch all tasks and classes through GET Request
   const fetchSchedules = async () => {
     const fetchedSchedules = await getSchedules();
@@ -30,9 +33,15 @@ const SchedulesPage = () => {
   };
 
   useEffect(() => {
-    if (state.tasks === undefined && state.classes === undefined)
+    if (
+      state.tasks === undefined &&
+      state.classes === undefined &&
+      isAuthenticated
+    )
       fetchSchedules();
-  }, []);
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) return <></>;
 
   return (
     <div

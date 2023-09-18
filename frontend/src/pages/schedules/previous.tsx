@@ -5,9 +5,12 @@ import useScheduleContext from "@/customHooks/useScheduleContext";
 import TaskGroup from "@/components/TaskGroup";
 // import ProtectRoute from "@/utils/protectRoute";
 import NoSchedule from "@/components/NoSchedule";
+import useAuthenticate from "@/customHooks/useAuthenticate";
 
 const Previous = () => {
   const { state, dispatch } = useScheduleContext();
+
+  const isAuthenticated = useAuthenticate(false, "/");
 
   const fetchSchedules = async () => {
     const fetchedSchedules = await getSchedules();
@@ -34,7 +37,7 @@ const Previous = () => {
     return new Date(bDeadline).getTime() - new Date(aDeadline).getTime();
   };
 
-  if (state.tasks === undefined) return <></>;
+  if (state.tasks === undefined || !isAuthenticated) return <></>;
 
   const previousTasks = state.tasks
     .filter((task) => selectPreviousTaks(task.deadline))
