@@ -17,7 +17,7 @@ dotenv.config();
 const app = express();
 // Allow front end to make HTTP requests
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: process.env.FRONTEND,
     methods: ["GET", "POST", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
     credentials: true,
