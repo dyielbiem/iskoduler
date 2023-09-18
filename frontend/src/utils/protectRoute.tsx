@@ -1,25 +1,25 @@
-import { getAuthenticate } from "./userRequests";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+// import { getAuthenticate } from "./userRequests";
+// import { useRouter } from "next/router";
+// import { useEffect, useState } from "react";
 
-export default function ProtectRoute(WrappedComponent: () => JSX.Element) {
-  return () => {
-    const router = useRouter();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+// export default function ProtectRoute(WrappedComponent: () => JSX.Element) {
+//   return () => {
+//     const router = useRouter();
+//     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    useEffect(() => {
-      const checkAuthentication = async () => {
-        const authenticateUser = await getAuthenticate();
-        if (Object.hasOwn(authenticateUser, "Error")) {
-          router.replace("/");
-          return console.log(authenticateUser.Error);
-        }
-        setIsAuthenticated(true);
-      };
+//     useEffect(() => {
+//       const checkAuthentication = async () => {
+//         const authenticateUser = await getAuthenticate();
+//         if (Object.hasOwn(authenticateUser, "Error")) {
+//           router.replace("/");
+//           return console.log(authenticateUser.Error);
+//         }
+//         setIsAuthenticated(true);
+//       };
 
-      checkAuthentication();
-    }, []);
+//       checkAuthentication();
+//     }, []);
 
-    return isAuthenticated ? <WrappedComponent /> : <></>;
-  };
-}
+//     return isAuthenticated ? <WrappedComponent /> : <></>;
+//   };
+// }

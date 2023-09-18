@@ -1,26 +1,26 @@
-import { getAuthenticate } from "./userRequests";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+// import { getAuthenticate } from "./userRequests";
+// import { useRouter } from "next/router";
+// import { useEffect, useState } from "react";
 
-export default function RedirectAuthorizedUser(
-  WrappedComponent: () => JSX.Element
-) {
-  return () => {
-    const router = useRouter();
-    const [isAuthorized, setIsAuthorized] = useState(true);
+// export default function RedirectAuthorizedUser(
+//   WrappedComponent: () => JSX.Element
+// ) {
+//   return () => {
+//     const router = useRouter();
+//     const [isAuthorized, setIsAuthorized] = useState(true);
 
-    useEffect(() => {
-      const checkAuthentication = async () => {
-        const authenticateUser = await getAuthenticate();
-        if (Object.hasOwn(authenticateUser, "Error"))
-          return setIsAuthorized(false);
-        setIsAuthorized(true);
-        router.replace("/schedules");
-      };
+//     useEffect(() => {
+//       const checkAuthentication = async () => {
+//         const authenticateUser = await getAuthenticate();
+//         if (Object.hasOwn(authenticateUser, "Error"))
+//           return setIsAuthorized(false);
+//         setIsAuthorized(true);
+//         router.replace("/schedules");
+//       };
 
-      checkAuthentication();
-    }, []);
+//       checkAuthentication();
+//     }, []);
 
-    return isAuthorized ? null : <WrappedComponent />;
-  };
-}
+//     return isAuthorized ? null : <WrappedComponent />;
+//   };
+// }
