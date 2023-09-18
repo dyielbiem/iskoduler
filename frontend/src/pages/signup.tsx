@@ -1,7 +1,7 @@
 import SignUpForm from "@/components/SignUpForm";
 import WelcomeJumbotron from "@/components/WelcomeJumbotron";
 import Link from "next/link";
-import redirectAuthorizedUser from "@/utils/redirectAuthorizedUser";
+import RedirectAuthorizedUser from "@/utils/redirectAuthorizedUser";
 
 const SignUp = () => {
   return (
@@ -56,4 +56,4 @@ const SignUp = () => {
   );
 };
 
-export default redirectAuthorizedUser(SignUp);
+export default RedirectAuthorizedUser(SignUp);

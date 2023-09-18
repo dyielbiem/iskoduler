@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import protectRoute from "@/utils/protectRoute";
+import ProtectRoute from "@/utils/protectRoute";
 import MainProfile from "@/components/MainProfile";
 import ProfileJumbotron from "@/components/ProfileJumbotron";
 
@@ -23,4 +23,4 @@ const Profile = () => {
   );
 };
 
-export default protectRoute(Profile);
+export default ProtectRoute(Profile);

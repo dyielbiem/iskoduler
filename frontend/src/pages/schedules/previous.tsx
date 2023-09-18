@@ -3,7 +3,7 @@ import { getSchedules } from "@/utils/schedulesRequests";
 import { useEffect } from "react";
 import useScheduleContext from "@/customHooks/useScheduleContext";
 import TaskGroup from "@/components/TaskGroup";
-import protectRoute from "@/utils/protectRoute";
+import ProtectRoute from "@/utils/protectRoute";
 import NoSchedule from "@/components/NoSchedule";
 
 const Previous = () => {
@@ -67,4 +67,4 @@ const Previous = () => {
   );
 };
 
-export default protectRoute(Previous);
+export default ProtectRoute(Previous);
