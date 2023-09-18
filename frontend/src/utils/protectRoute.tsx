@@ -2,7 +2,7 @@ import { getAuthenticate } from "./userRequests";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const ProtectRoute = (WrappedComponent: () => JSX.Element) => {
+export default function ProtectRoute(WrappedComponent: () => JSX.Element) {
   return () => {
     const router = useRouter();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -22,8 +22,4 @@ const ProtectRoute = (WrappedComponent: () => JSX.Element) => {
 
     return isAuthenticated ? <WrappedComponent /> : <></>;
   };
-};
-
-ProtectRoute.displayName = "ProtectRoute";
-
-export default ProtectRoute;
+}

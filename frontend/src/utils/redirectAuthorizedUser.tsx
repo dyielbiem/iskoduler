@@ -2,7 +2,9 @@ import { getAuthenticate } from "./userRequests";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const RedirectAuthorizedUser = (WrappedComponent: () => JSX.Element) => {
+export default function RedirectAuthorizedUser(
+  WrappedComponent: () => JSX.Element
+) {
   return () => {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(true);
@@ -21,8 +23,4 @@ const RedirectAuthorizedUser = (WrappedComponent: () => JSX.Element) => {
 
     return isAuthorized ? null : <WrappedComponent />;
   };
-};
-
-RedirectAuthorizedUser.displayName = "RedirectAuthorizedUser";
-
-export default RedirectAuthorizedUser;
+}
