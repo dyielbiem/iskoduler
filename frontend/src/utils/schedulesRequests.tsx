@@ -2,7 +2,7 @@
 export const getSchedules = async () => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/`,
       {
         method: "GET",
         credentials: "include",
@@ -27,7 +27,7 @@ export const postTask = async (
 ) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/tasks`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/tasks/`,
       {
         method: "POST",
         credentials: "include",
@@ -65,7 +65,7 @@ interface taskType {
 export const updateTask = async (taskID: string, task: taskType) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/tasks/${taskID}`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/tasks/${taskID}/`,
       {
         method: "PATCH",
         body: JSON.stringify(task),
@@ -88,7 +88,7 @@ export const updateTask = async (taskID: string, task: taskType) => {
 export const deleteTask = async (taskID: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/tasks/${taskID}`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/tasks/${taskID}/`,
       {
         method: "DELETE",
         credentials: "include",
@@ -117,7 +117,7 @@ export const postClass = async (
 ) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/classes`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/classes/`,
       {
         method: "POST",
         credentials: "include",
@@ -156,7 +156,7 @@ interface classType {
 export const updateClass = async (classID: string, classItem: classType) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/classes/${classID}`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/classes/${classID}/`,
       {
         method: "PATCH",
         body: JSON.stringify(classItem),
@@ -179,7 +179,7 @@ export const updateClass = async (classID: string, classItem: classType) => {
 export const deleteClass = async (classID: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/classes/${classID}`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/schedules/classes/${classID}/`,
       {
         method: "DELETE",
         credentials: "include",

@@ -15,7 +15,7 @@ interface userType {
 export const postSignUp = async (user: userType) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/signup`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/signup/`,
       {
         method: "POST",
         body: JSON.stringify(user),
@@ -39,7 +39,7 @@ export const postSignUp = async (user: userType) => {
 export const postSignIn = async (username: string, password: string) => {
   try {
     const signInUser = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/signin`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/signin/`,
       {
         method: "POST",
         body: JSON.stringify({
@@ -66,7 +66,7 @@ export const postSignIn = async (username: string, password: string) => {
 export const patchUserName = async (name: nameType) => {
   try {
     const respond = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/name`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/name/`,
       {
         method: "PATCH",
         body: JSON.stringify(name),
@@ -92,7 +92,7 @@ interface passwordType {
 export const patchUserPassword = async (password: passwordType) => {
   try {
     const newPassword = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/password`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/password/`,
       {
         method: "PATCH",
         body: JSON.stringify(password),
@@ -170,7 +170,7 @@ export const getLogout = async () => {
 export const patchUserImage = async (formData: FormData) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/image`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/image/`,
       {
         method: "PATCH",
         credentials: "include",
@@ -191,7 +191,7 @@ export const patchUserImage = async (formData: FormData) => {
 export const deleteUserImage = async () => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/image`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/image/`,
       {
         method: "DELETE",
         credentials: "include",
