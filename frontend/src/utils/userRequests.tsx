@@ -38,7 +38,6 @@ export const postSignUp = async (user: userType) => {
 // Sign In User through POST Request
 export const postSignIn = async (username: string, password: string) => {
   try {
-    console.log(process.env.NEXT_PUBLIC_BACKEND);
     const signInUser = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND}/api/users/signin`,
       {
