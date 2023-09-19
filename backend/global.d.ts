@@ -7,5 +7,6 @@ namespace NodeJS {
     CLOUD_API_KEY: string;
     CLOUD_API_SECRET: string;
     FRONTEND: string;
+    DOMAIN: string;
   }
 }

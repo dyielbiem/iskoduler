@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import { Readable } from "stream";
 import { Buffer } from "buffer";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Function for creating jsonwebtoken
 const createToken = (_id: string, res: Response) => {
@@ -14,6 +17,7 @@ const createToken = (_id: string, res: Response) => {
     maxAge: 10800000,
     sameSite: "none",
     secure: true,
+    domain: process.env.DOMAIN,
   });
 };
 
