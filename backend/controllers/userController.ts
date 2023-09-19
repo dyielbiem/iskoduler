@@ -175,7 +175,11 @@ export const patchUserPassword = async (req: Request, res: Response) => {
 // Controller to logout a new user through a GET request
 export const getLogout = (req: Request, res: Response) => {
   try {
-    res.clearCookie("token", { sameSite: "none", secure: true });
+    res.clearCookie("token", {
+      sameSite: "none",
+      secure: true,
+      domain: process.env.DOMAIN,
+    });
     res.status(200).json({ Message: "User is logged out" });
   } catch (error: any) {
     res.status(400).json({ Error: error.message });
