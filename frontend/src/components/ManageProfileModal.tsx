@@ -67,7 +67,10 @@ const ManageProfileModal = ({
           py-2 px-2"
         >
           <h2 className="text-xl font-bold">Profile image</h2>
-          <IoCloseCircle className="fill-black hover:fill-zinc-600 text-3xl cursor-pointer" />
+          <IoCloseCircle
+            onClick={closeModal}
+            className="fill-black hover:fill-zinc-600 text-3xl cursor-pointer"
+          />
         </div>
         <ul>
           <li
