@@ -104,7 +104,7 @@ const ClassForm = ({
         timeEnd
       );
 
-      if (Object.hasOwn(newClass, "Error")) return setError(newClass.Error);
+      if (newClass.Error) return setError(newClass.Error);
 
       dispatch({ type: "ADD_CLASS", payload: newClass });
       closeForm();

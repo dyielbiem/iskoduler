@@ -26,8 +26,7 @@ const SchedulesPage = () => {
   // Fetch all tasks and classes through GET Request
   const fetchSchedules = async () => {
     const fetchedSchedules = await getSchedules();
-    if (Object.hasOwn(fetchedSchedules, "Error"))
-      return console.log(fetchedSchedules.Error);
+    if (fetchedSchedules.Error) return console.log(fetchedSchedules.Error);
     dispatch({ type: "GET_TASKS", payload: fetchedSchedules.Tasks });
     dispatch({ type: "GET_CLASSES", payload: fetchedSchedules.Classes });
   };

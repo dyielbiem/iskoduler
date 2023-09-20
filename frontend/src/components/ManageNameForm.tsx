@@ -53,7 +53,7 @@ const ManageNameForm = ({
     });
 
     // Check if Error has occured in response
-    if (Object.hasOwn(updatedUserName, "Error")) {
+    if (updatedUserName.Error) {
       setIsLoading(false);
       return setError(updatedUserName.Error);
     }

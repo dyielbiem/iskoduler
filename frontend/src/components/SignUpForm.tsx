@@ -58,7 +58,7 @@ const SignUpForm = () => {
     setIsButtonDisable(true);
     setIsLoading(true);
     const signedUpUser = await postSignUp(body);
-    if (Object.hasOwn(signedUpUser, "Error")) {
+    if (signedUpUser.Error) {
       setIsButtonDisable(false);
       setIsLoading(false);
       return setError(signedUpUser.Error);

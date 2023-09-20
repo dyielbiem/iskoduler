@@ -15,7 +15,7 @@ const MainProfile = () => {
 
   const handleLogoutClick = async () => {
     const loggedoutUser = await getLogout();
-    if (Object.hasOwn(loggedoutUser, "Error")) console.log(loggedoutUser.Error);
+    if (loggedoutUser.Error) console.log(loggedoutUser.Error);
 
     await router.replace("/");
     // Empty the rendered task and classe schedules and user information

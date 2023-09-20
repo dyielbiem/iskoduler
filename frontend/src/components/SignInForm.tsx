@@ -21,7 +21,7 @@ const SignInForm = () => {
     setIsLoading(true);
     const loggedInUser = await postSignIn(username, password);
 
-    if (Object.hasOwn(loggedInUser, "Error")) {
+    if (loggedInUser.Error) {
       setIsLoading(false);
       return setError(loggedInUser.Error);
     }

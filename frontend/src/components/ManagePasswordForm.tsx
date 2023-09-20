@@ -64,7 +64,7 @@ const ManagePasswordForm = ({ visibleForm, setVisibleForm }: Props) => {
       currentPassword,
       newPassword,
     });
-    if (Object.hasOwn(patchedUserPassword, "Error")) {
+    if (patchedUserPassword.Error) {
       setIsLoading(false);
       return setError(patchedUserPassword.Error);
     }

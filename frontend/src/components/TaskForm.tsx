@@ -98,7 +98,7 @@ const TaskForm = ({
         description
       );
 
-      if (Object.hasOwn(newTask, "Error")) return setError(newTask.Error);
+      if (newTask.Error) return setError(newTask.Error);
 
       // Add the new task in the task view
       dispatch({ type: "ADD_TASK", payload: newTask });
