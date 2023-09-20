@@ -33,15 +33,6 @@ const SignInForm = () => {
     setError("");
   };
 
-  // Prevent password input field to accept white space characters
-  const handlePasswordInput = (event: inputChangeType) => {
-    if (event.target.value.at(-1) === " ") {
-      setPassword(event.target.value.slice(0, -1));
-    } else {
-      setPassword(event.target.value);
-    }
-  };
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -62,7 +53,7 @@ const SignInForm = () => {
         type="password"
         placeholder="Password"
         value={password}
-        onChange={(event) => handlePasswordInput(event)}
+        onChange={(event) => setPassword(event.target.value)}
         className="rounded-xl outline-none 
                    text-lg
                    px-3 py-2"

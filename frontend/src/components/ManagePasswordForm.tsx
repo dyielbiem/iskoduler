@@ -80,15 +80,6 @@ const ManagePasswordForm = ({ visibleForm, setVisibleForm }: Props) => {
     setError("");
   };
 
-  const handlePasswordType = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setInputValue: React.Dispatch<React.SetStateAction<string>>
-  ) => {
-    if (event.target.value.at(-1) !== " ") {
-      setInputValue(event.target.value);
-    }
-  };
-
   return (
     <form
       className={`flex-col justify-center items-center w-full
@@ -106,19 +97,19 @@ const ManagePasswordForm = ({ visibleForm, setVisibleForm }: Props) => {
         type="password"
         placeholder="Current password"
         value={currentPassword}
-        onChange={(event) => handlePasswordType(event, setCurrentPassword)}
+        onChange={(event) => setCurrentPassword(event.target.value)}
       />
       <input
         type="password"
         placeholder="New password"
         value={newPassword}
-        onChange={(event) => handlePasswordType(event, setNewPassword)}
+        onChange={(event) => setNewPassword(event.target.value)}
       />
       <input
         type="password"
         placeholder="Re-type new password"
         value={retypeNewPassword}
-        onChange={(event) => handlePasswordType(event, setRetypeNewPassword)}
+        onChange={(event) => setRetypeNewPassword(event.target.value)}
       />
       {error && (
         <p

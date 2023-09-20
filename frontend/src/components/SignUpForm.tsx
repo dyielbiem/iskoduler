@@ -37,16 +37,6 @@ const SignUpForm = () => {
     }
   }, [password, retypePassword]);
 
-  // Prevent password input field to accept white space characters
-  const handlePasswordInput = (
-    event: inputChangeType,
-    setInput: setInputType
-  ) => {
-    if (event.target.value.at(-1) !== " ") {
-      setInput(event.target.value);
-    }
-  };
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -114,7 +104,7 @@ const SignUpForm = () => {
         type="password"
         placeholder="Password"
         value={password}
-        onChange={(event) => handlePasswordInput(event, setPassword)}
+        onChange={(event) => setPassword(event.target.value)}
         className="rounded-xl outline-none
                    px-3 py-2 "
       />
@@ -122,7 +112,7 @@ const SignUpForm = () => {
         type="password"
         placeholder="Re-type Password"
         value={retypePassword}
-        onChange={(event) => handlePasswordInput(event, setRetypePassword)}
+        onChange={(event) => setRetypePassword(event.target.value)}
         className="rounded-xl outline-none
                    px-3 py-2"
       />
