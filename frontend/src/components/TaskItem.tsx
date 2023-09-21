@@ -87,7 +87,7 @@ const TaskItem = ({ task, isEditHidden }: Props) => {
         className={`bg-tertiary
         ${task.type === "Activity" ? "text-activity" : "text-assignment"}
         font-bold
-        my-1.5`}
+        my-2 md:my-1.5`}
       >
         {timeFormatter.format(new Date(task.deadline))}{" "}
       </p>
@@ -100,7 +100,7 @@ const TaskItem = ({ task, isEditHidden }: Props) => {
       <div className="w-full flex-1 flex flex-col items-end justify-end bg-tertiary">
         <p
           className={`border-2 rounded-full font-bold
-          w-fit self-end bg-tertiary mt-2 
+          w-fit self-end bg-tertiary mt-6 md:mt-4
           ${
             task.type === "Activity"
               ? "border-activity text-activity"
