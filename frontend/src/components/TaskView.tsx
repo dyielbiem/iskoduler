@@ -8,10 +8,15 @@ const TaskView = () => {
   // Array filter function to group the tasks that have a deadline for today
   const selectTodayTasks = (deadlineString: string) => {
     const deadline = new Date(deadlineString);
-    deadline.setHours(0, 0, 0, 0);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return deadline.getTime() / 86400000 === today.getTime() / 86400000;
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+    const deadlineDate = new Date(deadlineString).setHours(0, 0, 0, 0);
+    const todayDate = new Date().setHours(0, 0, 0, 0);
+
+    console.log(deadlineString, deadline);
+
+    return deadlineDate === todayDate && deadline.getTime() >= today.getTime();
   };
 
   // Array filter function to group the tasks that have a deadline for tomorrow

@@ -27,9 +27,7 @@ const Previous = () => {
   const selectPreviousTaks = (deadlineString: string) => {
     const today = new Date();
     const deadline = new Date(deadlineString);
-    today.setHours(0, 0, 0, 0);
-    deadline.setHours(0, 0, 0, 0);
-    return deadline.getTime() / 86400000 < today.getTime() / 86400000;
+    return deadline.getTime() < today.getTime();
   };
 
   const sortPreviousTask = (aDeadline: string, bDeadline: string) => {
