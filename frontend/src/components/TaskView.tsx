@@ -14,8 +14,6 @@ const TaskView = () => {
     const deadlineDate = new Date(deadlineString).setHours(0, 0, 0, 0);
     const todayDate = new Date().setHours(0, 0, 0, 0);
 
-    console.log(deadlineString, deadline);
-
     return deadlineDate === todayDate && deadline.getTime() >= today.getTime();
   };
 
