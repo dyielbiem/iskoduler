@@ -15,16 +15,16 @@ import { Readable } from "stream";
 import dotenv from "dotenv";
 dotenv.config();
 // Function for creating jsonwebtoken
-const createToken = (_id, res) => {
-    const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3h" });
-    res.cookie("token", token, {
-        httpOnly: true,
-        maxAge: 10800000,
-        sameSite: "none",
-        secure: true,
-        domain: process.env.DOMAIN,
-    });
-};
+// const createToken = (_id: string, res: Response) => {
+//   const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3h" });
+//   res.cookie("token", token, {
+//     httpOnly: true,
+//     maxAge: 10800000,
+//     sameSite: "none",
+//     secure: true,
+//     domain: process.env.DOMAIN,
+//   });
+// };
 // Controller to signup a new user through a POST request
 export const postSignUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -41,8 +41,10 @@ export const postSignUp = (req, res) => __awaiter(void 0, void 0, void 0, functi
             password: hashedPassword,
         };
         const savedUser = yield user.create(newUser);
-        createToken(String(savedUser._id), res);
-        res.json({ username });
+        const token = jwt.sign({ _id: savedUser._id }, process.env.SECRET, {
+            expiresIn: "3h",
+        });
+        res.json({ username, token });
     }
     catch (error) {
         if (error.code === 11000) {
@@ -69,19 +71,21 @@ export const postSignIn = (req, res) => __awaiter(void 0, void 0, void 0, functi
         const checkPassword = yield bcrypt.compare(password, existingUser.password);
         if (!checkPassword)
             return res.status(400).json({ Error: "Incorrect password" });
-        createToken(String(existingUser._id), res);
-        res.json({ username, id: existingUser._id });
+        const token = jwt.sign({ _id: existingUser._id }, process.env.SECRET, {
+            expiresIn: "3h",
+        });
+        res.json({ username, id: existingUser._id, token });
     }
     catch (_a) {
         res.status(400).json({ Error: "Bad Request" });
     }
 });
 // Authenticate user requests
-export const getAuthenticate = (req, res) => {
+export const postAuthenticate = (req, res) => {
     res.json({ isAuthenticated: true });
 };
 // Controller for providing all the information of user
-export const getUserInformation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const postUserInformation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     try {
         const userID = (_b = req.user) === null || _b === void 0 ? void 0 : _b._id;
@@ -149,13 +153,8 @@ export const patchUserPassword = (req, res) => __awaiter(void 0, void 0, void 0,
     }
 });
 // Controller to logout a new user through a GET request
-export const getLogout = (req, res) => {
+export const postLogout = (req, res) => {
     try {
-        res.clearCookie("token", {
-            sameSite: "none",
-            secure: true,
-            domain: process.env.DOMAIN,
-        });
         res.status(200).json({ Message: "User is logged out" });
     }
     catch (error) {
@@ -209,7 +208,7 @@ export const patchUserImage = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 // Controller for deleting user's image
-export const deleteUserImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const patchDeleteUserImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _g;
     try {
         const userID = (_g = req.user) === null || _g === void 0 ? void 0 : _g._id;

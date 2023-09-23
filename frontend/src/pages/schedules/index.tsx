@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import TabSwitcher from "@/components/TabSwitcher";
 import Schedules from "@/components/Schedules";
 import { useEffect, useState } from "react";
-import { getSchedules } from "@/utils/schedulesRequests";
+import { postSchedules } from "@/utils/schedulesRequests";
 import TaskForm from "@/components/TaskForm";
 import ClassForm from "@/components/ClassForm";
 import useScheduleContext from "@/customHooks/useScheduleContext";
@@ -25,7 +25,9 @@ const SchedulesPage = () => {
 
   // Fetch all tasks and classes through GET Request
   const fetchSchedules = async () => {
-    const fetchedSchedules = await getSchedules();
+    const token = await localStorage.getItem("token");
+    if (!token) return console.log("Unauthorized");
+    const fetchedSchedules = await postSchedules(token);
     if (fetchedSchedules.Error) return console.log(fetchedSchedules.Error);
     dispatch({ type: "GET_TASKS", payload: fetchedSchedules.Tasks });
     dispatch({ type: "GET_CLASSES", payload: fetchedSchedules.Classes });

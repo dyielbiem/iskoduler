@@ -1,4 +1,4 @@
-import { deleteTask, deleteClass } from "@/utils/schedulesRequests";
+import { patchDeleteTask, patchDeleteClass } from "@/utils/schedulesRequests";
 import useScheduleContext from "@/customHooks/useScheduleContext";
 
 interface Props {
@@ -18,12 +18,16 @@ const DeleteModal = ({
   const handleConfirmClick = async () => {
     try {
       if (type === "task") {
-        const deletedTask = await deleteTask(scheduleID);
+        const token = await localStorage.getItem("token");
+        if (!token) return console.log("Unauthorized");
+        const deletedTask = await patchDeleteTask(scheduleID, token);
         if (deletedTask.Error) throw Error(deletedTask.Error);
         setIsThisVisible((prevState) => !prevState);
         dispatch({ type: "DELETE_TASK", payload: deletedTask });
       } else if (type === "class") {
-        const deletedClass = await deleteClass(scheduleID);
+        const token = await localStorage.getItem("token");
+        if (!token) return console.log("Unauthorized");
+        const deletedClass = await patchDeleteClass(scheduleID, token);
         if (deletedClass.Error) throw Error(deletedClass.Error);
         setIsThisVisible((prevState) => !prevState);
         dispatch({ type: "DELETE_CLASS", payload: deletedClass });
@@ -58,7 +62,7 @@ const DeleteModal = ({
           Delete
         </h2>
         <p
-          className="text-center 
+          className="text-center font-medium
                      mb-4"
         >
           {`Are you sure to delete this ${type}? This action cannot be undone.`}

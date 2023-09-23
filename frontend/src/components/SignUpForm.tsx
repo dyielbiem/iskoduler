@@ -64,6 +64,8 @@ const SignUpForm = () => {
       return setError(signedUpUser.Error);
     }
 
+    await localStorage.setItem("token", signedUpUser.token);
+
     await router.push("/schedules");
     setIsButtonDisable(false);
     setIsLoading(false);

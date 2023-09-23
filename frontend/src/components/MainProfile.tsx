@@ -1,9 +1,8 @@
 import useScheduleContext from "@/customHooks/useScheduleContext";
 import useUserContext from "@/customHooks/useUserContext";
-import { getLogout, getUserInformation } from "@/utils/userRequests";
+import { postLogout } from "@/utils/userRequests";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { AiOutlineRight } from "react-icons/ai";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import Image from "next/image";
@@ -14,8 +13,7 @@ const MainProfile = () => {
   const { dispatch } = useScheduleContext();
 
   const handleLogoutClick = async () => {
-    const loggedoutUser = await getLogout();
-    if (loggedoutUser.Error) console.log(loggedoutUser.Error);
+    await localStorage.removeItem("token");
 
     await router.replace("/");
     // Empty the rendered task and classe schedules and user information

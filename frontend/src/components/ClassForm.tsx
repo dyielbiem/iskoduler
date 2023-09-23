@@ -96,13 +96,16 @@ const ClassForm = ({
       return setError("Scheduled time range is invalid");
 
     if (action.type === "ADD") {
-      const newClass = await postClass(
+      const token = await localStorage.getItem("token");
+      if (!token) return console.log("Unauthorized");
+      const newClass = await postClass({
         className,
         description,
         daySchedule,
         timeStart,
-        timeEnd
-      );
+        timeEnd,
+        token,
+      });
 
       if (newClass.Error) return setError(newClass.Error);
 
@@ -118,12 +121,16 @@ const ClassForm = ({
       )
         return setIsVisible((prevState) => !prevState);
 
+      const token = await localStorage.getItem("token");
+      if (!token) return console.log("Unauthorized");
+
       const editedClass = await updateClass(action.classID, {
         className,
         description,
         daySchedule,
         timeStart,
         timeEnd,
+        token,
       });
 
       if (Object.hasOwn(editedClass, "Error"))

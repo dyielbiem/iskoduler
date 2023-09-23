@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import { getSchedules } from "@/utils/schedulesRequests";
+import { postSchedules } from "@/utils/schedulesRequests";
 import { useEffect } from "react";
 import useScheduleContext from "@/customHooks/useScheduleContext";
 import TaskGroup from "@/components/TaskGroup";
@@ -13,7 +13,9 @@ const Previous = () => {
   const isAuthenticated = useAuthenticate(false, "/");
 
   const fetchSchedules = async () => {
-    const fetchedSchedules = await getSchedules();
+    const token = await localStorage.getItem("token");
+    if (!token) return console.log("Unauthorized");
+    const fetchedSchedules = await postSchedules(token);
     if (fetchedSchedules.Error) return console.log(fetchedSchedules.Error);
     dispatch({ type: "GET_TASKS", payload: fetchedSchedules.Tasks });
     dispatch({ type: "GET_CLASSES", payload: fetchedSchedules.Classes });

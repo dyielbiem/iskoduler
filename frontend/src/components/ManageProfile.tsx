@@ -4,9 +4,8 @@ import ManageNameForm from "./ManageNameForm";
 import ManageTab from "./ManageTab";
 import ManagePasswordForm from "./ManagePasswordForm";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useUserContext from "@/customHooks/useUserContext";
-import { getUserInformation } from "@/utils/userRequests";
 import Image from "next/image";
 import ManageProfileModal from "./ManageProfileModal";
 import UploadImageModal from "./UploadImageModal";
@@ -15,7 +14,7 @@ import DeleteImageModal from "./DeleteImageModal";
 type formType = "name" | "password" | undefined;
 
 const ManageProfile = () => {
-  const { userInformation, setUserInformation } = useUserContext();
+  const { userInformation } = useUserContext();
   const router = useRouter();
   const [visibleForm, setVisibleForm] = useState<formType>();
   const [isManageProfilVisible, setIsManageProfileVisible] =

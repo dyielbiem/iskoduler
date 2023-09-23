@@ -1,6 +1,7 @@
 interface nameType {
   firstname: string;
   lastname: string;
+  token: string;
 }
 
 interface userType {
@@ -22,7 +23,6 @@ export const postSignUp = async (user: userType) => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
       }
     );
 
@@ -49,7 +49,6 @@ export const postSignIn = async (username: string, password: string) => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
       }
     );
     const response: any = await signInUser.json();
@@ -73,7 +72,6 @@ export const patchUserName = async (name: nameType) => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
       }
     );
 
@@ -87,6 +85,7 @@ export const patchUserName = async (name: nameType) => {
 interface passwordType {
   currentPassword: string;
   newPassword: string;
+  token: string;
 }
 
 export const patchUserPassword = async (password: passwordType) => {
@@ -99,7 +98,6 @@ export const patchUserPassword = async (password: passwordType) => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
       }
     );
 
@@ -111,13 +109,16 @@ export const patchUserPassword = async (password: passwordType) => {
 };
 
 // Authenticate user through GET request
-export const getAuthenticate = async () => {
+export const postAuthenticate = async (token: string) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND}/api/users/authenticate/`,
       {
-        method: "GET",
-        credentials: "include",
+        method: "POST",
+        body: JSON.stringify({ token }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
     const responseJSON = await response.json();
@@ -129,15 +130,19 @@ export const getAuthenticate = async () => {
   }
 };
 
-export const getUserInformation = async () => {
+export const postUserInformation = async (token: string) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/`,
       {
-        method: "GET",
-        credentials: "include",
+        method: "POST",
+        body: JSON.stringify({ token }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
+
     const responseJSON = await response.json();
     if (!response.ok) throw Error(responseJSON.Error);
 
@@ -148,13 +153,16 @@ export const getUserInformation = async () => {
 };
 
 // Log Out User through GET Request
-export const getLogout = async () => {
+export const postLogout = async (token: string) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND}/api/users/logout/`,
       {
-        method: "GET",
-        credentials: "include",
+        method: "POST",
+        body: JSON.stringify({ token }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
     const responseJSON = await response.json();
@@ -173,7 +181,6 @@ export const patchUserImage = async (formData: FormData) => {
       `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/image/`,
       {
         method: "PATCH",
-        credentials: "include",
         body: formData,
       }
     );
@@ -188,13 +195,16 @@ export const patchUserImage = async (formData: FormData) => {
 };
 
 // Delete user's display image through DELETE request
-export const deleteUserImage = async () => {
+export const deleteUserImage = async (token: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/image/`,
+      `${process.env.NEXT_PUBLIC_BACKEND}/api/users/information/image/delete/`,
       {
-        method: "DELETE",
-        credentials: "include",
+        method: "PATCH",
+        body: JSON.stringify({ token }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
 

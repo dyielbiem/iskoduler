@@ -50,16 +50,16 @@ const CustomSelect = ({
           optionsVisibility ? "flex" : "hidden"
         } w-full flex-col bg-white absolute 
         shadow-md border-[1px] font-medium mt-[2px]
-        rounded-md gap-px overflow-y-scroll
-        max-h-60`}
+        rounded-md gap-px overflow-y-scroll px-1 py-1
+        max-h-44`}
       >
         {selectOptions.map((option, index) => (
           <li
             key={index}
             onClick={() => selectType(option, index)}
             className={`${
-              index === 0 ? "text-gray-400" : "hover:bg-gray-300"
-            } px-3 py-2 rounded-xl cursor-pointer text-base`}
+              index === 0 ? "text-gray-400" : "hover:bg-zinc-200"
+            } px-3 py-2.5 rounded-md cursor-pointer text-base`}
           >
             {option}
           </li>

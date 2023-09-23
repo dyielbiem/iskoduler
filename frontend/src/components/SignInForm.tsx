@@ -26,6 +26,8 @@ const SignInForm = () => {
       return setError(loggedInUser.Error);
     }
 
+    localStorage.setItem("token", loggedInUser.token);
+
     await router.replace("/schedules");
     setUsername("");
     setPassword("");

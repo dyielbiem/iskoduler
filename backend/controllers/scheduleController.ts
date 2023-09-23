@@ -8,7 +8,7 @@ const timeFormatter = (timeString: string): Date => {
 };
 
 // GET Request  to provide all the schedules of user
-export const getSchedules = async (req: Request, res: Response) => {
+export const postSchedules = async (req: Request, res: Response) => {
   try {
     const userID: any = req.user?._id;
 
@@ -99,7 +99,7 @@ export const patchTask = async (req: Request, res: Response) => {
 };
 
 // DELETE Request to delete a new task
-export const deleteTask = async (req: Request, res: Response) => {
+export const patchDeleteTask = async (req: Request, res: Response) => {
   try {
     const taskID = req.params.id;
 
@@ -253,7 +253,7 @@ export const patchClass = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteClass = async (req: Request, res: Response) => {
+export const patchDeleteClass = async (req: Request, res: Response) => {
   try {
     const classID = req.params.id;
 

@@ -3,7 +3,7 @@ import { IoPersonCircleSharp } from "react-icons/io5";
 import { BiSolidCalendarWeek } from "react-icons/bi";
 import Link from "next/link";
 import { useEffect } from "react";
-import { getUserInformation } from "@/utils/userRequests";
+import { postUserInformation } from "@/utils/userRequests";
 import useUserContext from "@/customHooks/useUserContext";
 import Image from "next/image";
 
@@ -28,7 +28,10 @@ const Header = ({
   const { userInformation, setUserInformation } = useUserContext();
 
   const fetchUserInformation = async () => {
-    const userInformation = await getUserInformation();
+    const token = await localStorage.getItem("token");
+    if (!token) return console.log("Unauthorized");
+
+    const userInformation = await postUserInformation(token);
 
     if (userInformation.Error) return console.log(userInformation.Error);
     setUserInformation(userInformation);

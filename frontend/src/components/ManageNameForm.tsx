@@ -46,10 +46,14 @@ const ManageNameForm = ({
       return setError("Both first and last name are required");
     }
 
+    const token = await localStorage.getItem("token");
+    if (!token) return setError("Unauthorized");
+
     // Make a patch request to update user's name
     const updatedUserName = await patchUserName({
       firstname: firstName,
       lastname: lastName,
+      token: token,
     });
 
     // Check if Error has occured in response

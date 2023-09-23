@@ -14,7 +14,7 @@ const timeFormatter = (timeString) => {
     return new Date(`01/01/1970 ${timeString}:00`);
 };
 // GET Request  to provide all the schedules of user
-export const getSchedules = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const postSchedules = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
         const userID = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
@@ -92,7 +92,7 @@ export const patchTask = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 // DELETE Request to delete a new task
-export const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const patchDeleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const taskID = req.params.id;
         if (!mongoose.Types.ObjectId.isValid(taskID) || !taskID)
@@ -209,7 +209,7 @@ export const patchClass = (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(400).json({ Error: error.message });
     }
 });
-export const deleteClass = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const patchDeleteClass = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const classID = req.params.id;
         // Check if the class ID is valid

@@ -2,13 +2,13 @@ import express from "express";
 import {
   postSignUp,
   postSignIn,
-  getAuthenticate,
-  getUserInformation,
+  postAuthenticate,
+  postUserInformation,
   patchUserName,
   patchUserPassword,
-  getLogout,
+  postLogout,
   patchUserImage,
-  deleteUserImage,
+  patchDeleteUserImage,
 } from "../controllers/userController.js";
 import cookieParser from "cookie-parser";
 import authMiddleware from "../middleware/authMiddleware.js";
@@ -28,10 +28,10 @@ userRoutes.post("/signup", postSignUp);
 userRoutes.post("/signin", postSignIn);
 
 // GET method to authenticate user
-userRoutes.get("/authenticate", authMiddleware, getAuthenticate);
+userRoutes.post("/authenticate", authMiddleware, postAuthenticate);
 
 // GET method to retrieve user's information
-userRoutes.get("/information", authMiddleware, getUserInformation);
+userRoutes.post("/information", authMiddleware, postUserInformation);
 
 // PATCH method to update user's name
 userRoutes.patch("/information/name", authMiddleware, patchUserName);
@@ -40,17 +40,21 @@ userRoutes.patch("/information/name", authMiddleware, patchUserName);
 userRoutes.patch("/information/password", authMiddleware, patchUserPassword);
 
 // GET method to log out a user
-userRoutes.get("/logout", authMiddleware, getLogout);
+userRoutes.post("/logout", authMiddleware, postLogout);
 
 // PATCH method to update user's display image
 userRoutes.patch(
   "/information/image",
-  authMiddleware,
   upload.single("image"),
+  authMiddleware,
   patchUserImage
 );
 
 // PATCH method to update user's display image
-userRoutes.delete("/information/image", authMiddleware, deleteUserImage);
+userRoutes.patch(
+  "/information/image/delete",
+  authMiddleware,
+  patchDeleteUserImage
+);
 
 export default userRoutes;

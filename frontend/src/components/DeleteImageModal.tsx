@@ -21,7 +21,9 @@ const DeleteImageModal = ({
   };
 
   const handleConfirm = async () => {
-    const deletedImage = await deleteUserImage();
+    const token = await localStorage.getItem("token");
+    if (!token) return console.log("Unauthorized");
+    const deletedImage = await deleteUserImage(token);
     if (deletedImage.Error) {
       return console.log(deletedImage.Error);
     }
@@ -55,15 +57,15 @@ const DeleteImageModal = ({
       <div
         className="flex flex-col items-center px-8 py-8 rounded-xl 
         w-10/12 
-        max-w-sm gap-3 z-10"
+        max-w-sm gap-2 z-10"
       >
         <div className="flex gap-3 justify-center items-center mb-2">
-          <IoMdTrash className="text-4xl md:text-5xl flex-shrink-0 " />
+          <IoMdTrash className="text-3xl md:text-4xl flex-shrink-0 " />
           <h2 className="font-bold text-xl sm:text-2xl text-left">
             Delete image
           </h2>
         </div>
-        <p className="text-center max-w-[25ch] font-medium text-lg md:text-xl leading-[1.5rem]">
+        <p className="text-center max-w-[25ch] font-medium text-md">
           This action cannot be undone. Confirm to continue.
         </p>
         <div
@@ -71,14 +73,14 @@ const DeleteImageModal = ({
           flex-col md:flex-row gap-3 mt-4 w-full"
         >
           <button
-            className="py-2 md:py-3 text-lg md:text-xl bg-primary text-white 
+            className="py-2 text-lg md:text-xl bg-primary text-white 
             font-bold rounded-full flex-1"
             onClick={handleConfirm}
           >
             Confirm
           </button>
           <button
-            className="py-2 md:py-3 text-lg md:text-xl bg-zinc-200 text-black 
+            className="py-2 text-lg md:text-xl bg-zinc-200 text-black 
             font-bold rounded-full flex-1"
             onClick={handleCancel}
           >

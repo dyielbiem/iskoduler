@@ -10,8 +10,6 @@ declare global {
     interface Request {
       user?: {
         _id: string;
-        iat: number;
-        exp: number;
       };
     }
   }
@@ -24,16 +22,11 @@ const authMiddleware: express.RequestHandler = (
   next: NextFunction
 ) => {
   try {
-    const token = req.cookies.token;
+    const token = req.body.token;
     const user: any = jwt.verify(token, process.env.SECRET);
     req.user = user;
     next();
   } catch {
-    res.clearCookie("token", {
-      sameSite: "none",
-      secure: true,
-      domain: process.env.DOMAIN,
-    });
     return res.status(401).json({ Error: "Unauthorized" });
   }
 };

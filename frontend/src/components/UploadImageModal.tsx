@@ -19,8 +19,11 @@ const UploadImageModal = ({
   const { setUserInformation } = useUserContext();
   const handleUpload = async () => {
     setIsUploading(true);
+    const token = await localStorage.getItem("token");
+    if (!token) return console.log("Unauthorized");
     const formData = new FormData();
     formData.append("image", userImage);
+    formData.append("token", token);
     const updatedUserImage = await patchUserImage(formData);
 
     if (updatedUserImage.Error) {

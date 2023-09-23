@@ -10,16 +10,16 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Function for creating jsonwebtoken
-const createToken = (_id: string, res: Response) => {
-  const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3h" });
-  res.cookie("token", token, {
-    httpOnly: true,
-    maxAge: 10800000,
-    sameSite: "none",
-    secure: true,
-    domain: process.env.DOMAIN,
-  });
-};
+// const createToken = (_id: string, res: Response) => {
+//   const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3h" });
+//   res.cookie("token", token, {
+//     httpOnly: true,
+//     maxAge: 10800000,
+//     sameSite: "none",
+//     secure: true,
+//     domain: process.env.DOMAIN,
+//   });
+// };
 
 // Controller to signup a new user through a POST request
 export const postSignUp = async (req: Request, res: Response) => {
@@ -41,9 +41,10 @@ export const postSignUp = async (req: Request, res: Response) => {
     };
 
     const savedUser = await user.create(newUser);
-
-    createToken(String(savedUser._id), res);
-    res.json({ username });
+    const token = jwt.sign({ _id: savedUser._id }, process.env.SECRET, {
+      expiresIn: "3h",
+    });
+    res.json({ username, token });
   } catch (error: any) {
     if (error.code === 11000) {
       // Respond if the entered username is not available
@@ -74,20 +75,22 @@ export const postSignIn = async (req: Request, res: Response) => {
     if (!checkPassword)
       return res.status(400).json({ Error: "Incorrect password" });
 
-    createToken(String(existingUser._id), res);
-    res.json({ username, id: existingUser._id });
+    const token = jwt.sign({ _id: existingUser._id }, process.env.SECRET, {
+      expiresIn: "3h",
+    });
+    res.json({ username, id: existingUser._id, token });
   } catch {
     res.status(400).json({ Error: "Bad Request" });
   }
 };
 
 // Authenticate user requests
-export const getAuthenticate = (req: Request, res: Response) => {
+export const postAuthenticate = (req: Request, res: Response) => {
   res.json({ isAuthenticated: true });
 };
 
 // Controller for providing all the information of user
-export const getUserInformation = async (req: Request, res: Response) => {
+export const postUserInformation = async (req: Request, res: Response) => {
   try {
     const userID = req.user?._id;
     let foundUser = await user.findById(userID).select(["-__v", "-password"]);
@@ -173,13 +176,8 @@ export const patchUserPassword = async (req: Request, res: Response) => {
 };
 
 // Controller to logout a new user through a GET request
-export const getLogout = (req: Request, res: Response) => {
+export const postLogout = (req: Request, res: Response) => {
   try {
-    res.clearCookie("token", {
-      sameSite: "none",
-      secure: true,
-      domain: process.env.DOMAIN,
-    });
     res.status(200).json({ Message: "User is logged out" });
   } catch (error: any) {
     res.status(400).json({ Error: error.message });
@@ -244,7 +242,7 @@ export const patchUserImage = async (req: Request, res: Response) => {
 };
 
 // Controller for deleting user's image
-export const deleteUserImage = async (req: Request, res: Response) => {
+export const patchDeleteUserImage = async (req: Request, res: Response) => {
   try {
     const userID = req.user?._id;
     const retrievedUser = await user.findById(userID).select(["imageID"]);

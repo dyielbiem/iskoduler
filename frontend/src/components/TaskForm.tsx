@@ -1,7 +1,7 @@
 import { useState, SetStateAction, useEffect } from "react";
 import CustomSelect from "./CustomSelect";
 import DateTimePicker from "./DateTimePicker";
-import { IoArrowBack, IoCloseCircle } from "react-icons/io5";
+import { IoCloseCircle } from "react-icons/io5";
 import { postTask, updateTask } from "@/utils/schedulesRequests";
 import { DateTime } from "luxon";
 import useScheduleContext from "@/customHooks/useScheduleContext";
@@ -90,13 +90,17 @@ const TaskForm = ({
 
     // Check if action type of the form is to add new task
     if (action.type === "ADD") {
-      const newTask = await postTask(
+      const token = await localStorage.getItem("token");
+      if (!token) return setError("Unauthorized");
+
+      const newTask = await postTask({
         taskName,
-        String(`${deadline} ${timeZone}`),
+        deadline: String(`${deadline} ${timeZone}`),
         type,
         subject,
-        description
-      );
+        description,
+        token,
+      });
 
       if (newTask.Error) return setError(newTask.Error);
 
@@ -114,12 +118,15 @@ const TaskForm = ({
       )
         return setIsTaskFormVisible((prevState) => !prevState);
 
+      const token = await localStorage.getItem("token");
+      if (!token) return setError("Unauthorized");
       const editedTask = await updateTask(action.taskID, {
         taskName,
         deadline: String(`${deadline} ${timeZone}`),
         type,
         subject,
         description,
+        token,
       });
 
       if (Object.hasOwn(editedTask, "Error")) return setError(editedTask.Error);

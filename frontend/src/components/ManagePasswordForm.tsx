@@ -60,9 +60,14 @@ const ManagePasswordForm = ({ visibleForm, setVisibleForm }: Props) => {
       return setError("The password confirmation does not match");
     }
 
+    const token = await localStorage.getItem("token");
+
+    if (!token) return setError("Unauthorized");
+
     const patchedUserPassword = await patchUserPassword({
       currentPassword,
       newPassword,
+      token,
     });
     if (patchedUserPassword.Error) {
       setIsLoading(false);
@@ -120,16 +125,6 @@ const ManagePasswordForm = ({ visibleForm, setVisibleForm }: Props) => {
           {error}
         </p>
       )}
-      {/* <button
-        type="submit"
-        className="w-full bg-primary text-white 
-            rounded-full font-bold
-            mt-4
-            py-3
-            text-xl"
-      >
-        Done
-      </button> */}
       <FormButton
         isLoading={isLoading}
         textButton={"Done"}
